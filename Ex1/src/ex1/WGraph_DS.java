@@ -1,11 +1,10 @@
 package ex1;
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class WGraph_DS implements weighted_graph {
-
+public class WGraph_DS<V,E> implements weighted_graph, Serializable {
 
     public class NodeInfo implements node_info
     {
@@ -13,7 +12,7 @@ public class WGraph_DS implements weighted_graph {
         private double tag;
         private String info;
         private int nodeNumber=0;
-        private HashMap<Integer,node_info> nei;
+        public HashMap<Integer,HashMap<node_info,Double>> nei;
 
         public NodeInfo(int key,int tag,String info)
         {
@@ -21,7 +20,7 @@ public class WGraph_DS implements weighted_graph {
             setTag(tag);
             setInfo(info);
             nodeNumber++;
-            this.nei = new HashMap<Integer, node_info>();
+            this.nei = new HashMap<Integer,HashMap<node_info,Double>>();
         }
         public NodeInfo(int num)
         {
@@ -60,12 +59,13 @@ public class WGraph_DS implements weighted_graph {
 
         /** toString
          * returns a string representing the node's KEY not node's INFO
+         * @return
          */
 
-        public HashMap<Integer,node_info> getNeighborMap()
-        {
-            return this.nei;
-        }
+        public HashMap<Integer, HashMap<node_info, Double>> getNeighborMap()
+    {
+        return this.nei;
+    }
         /** getNeighborMap
          gets a nodes' neighbors using a hashmap (each node has a hashmap of neighbors)
          */
@@ -86,10 +86,10 @@ public class WGraph_DS implements weighted_graph {
         public void removeNodeHelper()
         {
             node_info temp;
-            Iterator<node_info> i = this.nei.values().iterator();
+            Iterator<HashMap<node_info,Double>> i = this.nei.values().iterator();
             while (i.hasNext())
             {
-                temp = i.next();
+                temp = (node_info) i.next();
                 i.remove();
                 removeNode(temp);
             }
@@ -99,46 +99,7 @@ public class WGraph_DS implements weighted_graph {
          * This function disconnects this node from all of it's neighbors,
          * And the other way around, used in other functions to enable fast runtime and a simpler removeNodeHelper
          */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
     public class Edge
     {
         double weight;
@@ -150,52 +111,37 @@ public class WGraph_DS implements weighted_graph {
             this.dest = dest;
             this.weight = weight;
         }
-
     }
+        public HashMap<Integer,node_info> nodes;
 
+        public int edges;
+        public int  MC;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        public WGraph_DS() {
+            nodes = new HashMap<Integer, node_info>();
+            edges = 0;
+            MC =0;
+        }
 
     @Override
     public node_info getNode(int key) {
+        if (nodes.containsKey(key))
+        {
+            return nodes.get(key);
+        }
         return null;
     }
 
     @Override
-    public boolean hasEdge(int node1, int node2) {
-        return false;
-    }
+        public boolean hasEdge(int node1, int node2)
+        {
+            NodeInfo n = (NodeInfo)nodes.get(node1); // cast to NodeData
+            return n.getNeighborMap().containsKey(node2); //if getNeighborMap has the other node than theres an edge.
+        }
+        /** hasEdge
+         * Checks if 2 nodes are neighbors, if they are there's an edge between them
+         * Checks a node's neighbor Hashmap for the other node, if present then they are neighbors and theres an edge.
+         */
 
     @Override
     public double getEdge(int node1, int node2) {

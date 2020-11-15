@@ -1,5 +1,7 @@
 package ex1;
 
+import java.util.Collection;
+
 public interface node_info {
     /**
      * Return the key (id) associated with this node.
@@ -30,4 +32,5 @@ public interface node_info {
      * @param t - the new value of the tag
      */
     public void setTag(double t);
+
 }

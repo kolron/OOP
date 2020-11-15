@@ -4,15 +4,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class WGraph_DS<V,E> implements weighted_graph, Serializable {
+public class WGraph_DS implements weighted_graph, Serializable {
 
     public class NodeInfo implements node_info
     {
         private int key;
         private double tag;
         private String info;
-        private int nodeNumber=0;
-        public HashMap<Integer,HashMap<node_info,Double>> nei;
+        private int nodeNumber = 0;
+        private HashMap<Integer,node_info> nei;
+        private HashMap<Integer, Double> neiWeight;
 
         public NodeInfo(int key,int tag,String info)
         {
@@ -20,7 +21,8 @@ public class WGraph_DS<V,E> implements weighted_graph, Serializable {
             setTag(tag);
             setInfo(info);
             nodeNumber++;
-            this.nei = new HashMap<Integer,HashMap<node_info,Double>>();
+            this.nei = new HashMap<Integer,node_info>();
+            this.neiWeight = new HashMap<Integer, Double>();
         }
         public NodeInfo(int num)
         {
@@ -61,14 +63,15 @@ public class WGraph_DS<V,E> implements weighted_graph, Serializable {
          * returns a string representing the node's KEY not node's INFO
          * @return
          */
-
-        public HashMap<Integer, HashMap<node_info, Double>> getNeighborMap()
-    {
-        return this.nei;
-    }
+        public HashMap<Integer, node_info> getNeighborMap()
+        {
+            return this.nei;
+        }
         /** getNeighborMap
          gets a nodes' neighbors using a hashmap (each node has a hashmap of neighbors)
          */
+        public Collection<node_info> getNi() { return this.nei.values(); }
+
         public void removeNode(node_info node)
         {
             if(node != null)
@@ -76,6 +79,8 @@ public class WGraph_DS<V,E> implements weighted_graph, Serializable {
                 NodeInfo n = (NodeInfo) node;
                 this.nei.remove(node.getKey()); //remove neighbors from hashmap
                 n.nei.remove(getKey()); // remove node from neighbor's hashmap
+                this.neiWeight.remove(node.getKey());
+                n.neiWeight.remove(node.getKey());
             }
         }
         /** removeNode
@@ -86,7 +91,7 @@ public class WGraph_DS<V,E> implements weighted_graph, Serializable {
         public void removeNodeHelper()
         {
             node_info temp;
-            Iterator<HashMap<node_info,Double>> i = this.nei.values().iterator();
+            Iterator<node_info> i = this.nei.values().iterator();
             while (i.hasNext())
             {
                 temp = (node_info) i.next();
@@ -100,20 +105,9 @@ public class WGraph_DS<V,E> implements weighted_graph, Serializable {
          * And the other way around, used in other functions to enable fast runtime and a simpler removeNodeHelper
          */
     }
-    public class Edge
-    {
-        double weight;
-        NodeInfo src;
-        NodeInfo dest;
 
-        public Edge(NodeInfo dest, double weight) {
-            super();
-            this.dest = dest;
-            this.weight = weight;
-        }
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public HashMap<Integer,node_info> nodes;
-
         public int edges;
         public int  MC;
 
@@ -136,7 +130,7 @@ public class WGraph_DS<V,E> implements weighted_graph, Serializable {
         public boolean hasEdge(int node1, int node2)
         {
             NodeInfo n = (NodeInfo)nodes.get(node1); // cast to NodeData
-            return n.getNeighborMap().containsKey(node2); //if getNeighborMap has the other node than theres an edge.
+            return n.nei.containsKey(node2); //if getNeighborMap has the other node than theres an edge.
         }
         /** hasEdge
          * Checks if 2 nodes are neighbors, if they are there's an edge between them
@@ -144,53 +138,99 @@ public class WGraph_DS<V,E> implements weighted_graph, Serializable {
          */
 
     @Override
-    public double getEdge(int node1, int node2) {
-        return 0;
+    public double getEdge(int node1, int node2)
+    {
+        if (!(hasEdge(node1, node2))) { return -1; }
+        NodeInfo n = (NodeInfo)nodes.get(node1); // cast to NodeData
+        return n.neiWeight.get(node2);
     }
 
     @Override
-    public void addNode(int key) {
-
+    public void addNode(int key)
+    {   if (!(nodes.containsKey(key)))
+        nodes.put(key, new NodeInfo(key)); //puts node in the hashmap
+        MC++;
     }
 
     @Override
-    public void connect(int node1, int node2, double w) {
+    public void connect(int node1, int node2, double w)
+    {
+        NodeInfo n1= (NodeInfo)nodes.get(node1);
+        NodeInfo n2= (NodeInfo)nodes.get(node2);
+        if(node1 != node2 && nodes.containsKey(node1) && nodes.containsKey(node2) && w >= 0)
+        {
+            if (hasEdge(node1, node2))
+            {
+                n1.neiWeight.put(node2, w);
+                n2.neiWeight.put(node1, w);
+                MC++;
+            }
+            else
+            {
+                n1.nei.put(node2, n2);
+                n2.nei.put(node1, n1);
+                n1.neiWeight.put(node2, w);
+                n2.neiWeight.put(node1, w);
+                MC++;
+                edges++;
+            }
 
+        }
     }
-
     @Override
     public Collection<node_info> getV() {
-        return null;
+        return this.nodes.values();
     }
 
     @Override
     public Collection<node_info> getV(int node_id) {
-        return null;
+        NodeInfo n = (NodeInfo)nodes.get(node_id);
+         return (n.getNi());
+
     }
 
     @Override
     public node_info removeNode(int key) {
-        return null;
+        {
+            NodeInfo t = (NodeInfo)nodes.get(key);
+            if (t != null) {
+                edges -= t.getNi().size(); // remove an edge for each neighbor
+                NodeInfo n = (NodeInfo) t; //Had to make another node n like in other cases in order to use removeNodeHelper function
+                n.removeNodeHelper(); //removeNodeHelper (remove from neighbor's map)
+                nodes.remove(key); // remove the key
+                MC += t.getNi().size() + 1; // removed edges, plus removed key.
+            }
+            return t;
+        }
     }
 
-    @Override
-    public void removeEdge(int node1, int node2) {
 
+    @Override
+    public void removeEdge(int node1, int node2)
+    {
+        NodeInfo n1 = (NodeInfo)nodes.get(node1);
+        NodeInfo n2 = (NodeInfo)nodes.get(node2);
+        if (hasEdge(node1, node2))
+        {
+            n1.removeNode(nodes.get(n2));
+            edges--;
+            MC++;
+        }
     }
 
     @Override
     public int nodeSize() {
-        return 0;
+        return nodes.size();
     }
 
     @Override
     public int edgeSize() {
-        return 0;
+        return edges;
     }
 
     @Override
     public int getMC() {
-        return 0;
+        return MC;
     }
 
 }

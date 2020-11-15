@@ -1,8 +1,6 @@
 package ex1;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 public class WGraph_DS implements weighted_graph, Serializable {
 
@@ -116,6 +114,29 @@ public class WGraph_DS implements weighted_graph, Serializable {
             edges = 0;
             MC =0;
         }
+    /*public WGraph_DS( WGraph_DS g)
+    {
+        this.nodes = new HashMap<Integer, node_info>(); // make a new hashmap
+
+        for(node_info n : g.nodes.values()) // loop through all the nodes
+        {
+            node_info t = new NodeInfo(n.getKey(),0,"");
+            this.nodes.put(n.getKey(),t); // put the node using its key in the new hashmap
+        }
+
+        for(node_info n : g.nodes.values())
+        {
+            n.neiWei
+            NodeInfo n1 = (NodeInfo)nodes.get(n.getKey());
+            node_info t = this.nodes.get(n.getKey());// get the instance of the node with the matching key from the original graph
+            for(node_info j: n1.getNi())
+            {
+                t.connect(this.getNode(j.getKey())); //add t to neighbors list
+            }
+        }
+        this.edges = g.edges;
+        this.MC = g.MC;
+    }*/
 
     @Override
     public node_info getNode(int key) {
@@ -157,7 +178,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
     {
         NodeInfo n1= (NodeInfo)nodes.get(node1);
         NodeInfo n2= (NodeInfo)nodes.get(node2);
-        if(node1 != node2 && nodes.containsKey(node1) && nodes.containsKey(node2) && w >= 0)
+        if (n1 == null || n2 == null) { return; }
+        if(node1 != node2 && w >= 0)
         {
             if (hasEdge(node1, node2))
             {
@@ -181,12 +203,16 @@ public class WGraph_DS implements weighted_graph, Serializable {
     public Collection<node_info> getV() {
         return this.nodes.values();
     }
-
     @Override
-    public Collection<node_info> getV(int node_id) {
-        NodeInfo n = (NodeInfo)nodes.get(node_id);
-         return (n.getNi());
-
+    public Collection<node_info> getV(int node_id)
+    {
+        NodeInfo n = (NodeInfo) nodes.get(node_id);
+        ArrayList<node_info> arr = new ArrayList<>();
+        for (node_info t : n.nei.values())
+        {
+            arr.add(n);
+        }
+        return arr;
     }
 
     @Override
@@ -232,6 +258,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     public int getMC() {
         return MC;
     }
+
 
 }
 

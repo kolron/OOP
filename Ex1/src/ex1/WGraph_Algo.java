@@ -121,34 +121,8 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable
 
     @Override
     public List<node_info> shortestPath(int src, int dest) {
-        node_info source = graph.getNode(src);
-        node_info desti = graph.getNode(dest);
-        Djik(src, dest);
-        if(desti.getTag() == Double.MAX_VALUE) return null;
-        node_info runner = desti;
-        Queue<node_info> queue = new LinkedList<>();
-        Stack<node_info> stack = new Stack<>();
-        List<node_info> path = new LinkedList<>();
-        stack.push(desti);
-        while(runner != source) {
-            for(node_info current : graph.getV(runner.getKey())) {
-                double weight = current.getTag() + graph.getEdge(current.getKey(),runner.getKey());
-                if(runner.getTag() == weight) {
-                    queue.add(current);
-                    stack.add(current);
-                    break;
-                }
-            }
-            runner = queue.poll();
-        }
-        // now the stack is full by reverse order of the path
-        while(!stack.isEmpty()) {
-            path.add(stack.pop());
-        }
-        return path;
-
+        return null;
     }
-
 
     @Override
     public boolean save(String file) {

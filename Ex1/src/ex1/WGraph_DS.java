@@ -89,7 +89,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
         public void removeNodeHelper()
         {
             node_info temp;
-
             Iterator<node_info> i = this.nei.values().iterator();
             while (i.hasNext())
             {
@@ -103,6 +102,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * This function disconnects this node from all of it's neighbors,
          * And the other way around, used in other functions to enable fast runtime and a simpler removeNodeHelper
          */
+
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,29 +116,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
             edges = 0;
             MC =0;
         }
-    /*public WGraph_DS( WGraph_DS g)
-    {
-        this.nodes = new HashMap<Integer, node_info>(); // make a new hashmap
-
-        for(node_info n : g.nodes.values()) // loop through all the nodes
-        {
-            node_info t = new NodeInfo(n.getKey(),0,"");
-            this.nodes.put(n.getKey(),t); // put the node using its key in the new hashmap
-        }
-
-        for(node_info n : g.nodes.values())
-        {
-            n.neiWei
-            NodeInfo n1 = (NodeInfo)nodes.get(n.getKey());
-            node_info t = this.nodes.get(n.getKey());// get the instance of the node with the matching key from the original graph
-            for(node_info j: n1.getNi())
-            {
-                t.connect(this.getNode(j.getKey())); //add t to neighbors list
-            }
-        }
-        this.edges = g.edges;
-        this.MC = g.MC;
-    }*/
 
     @Override
     public node_info getNode(int key) {
@@ -222,7 +200,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
             NodeInfo t = (NodeInfo)nodes.get(key);
             if (t != null) {
                 edges -= t.getNi().size(); // remove an edge for each neighbor
-                NodeInfo n = (NodeInfo) t; //Had to make another node n like in other cases in order to use removeNodeHelper function
+                NodeInfo n = (NodeInfo) t;
                 n.removeNodeHelper(); //removeNodeHelper (remove from neighbor's map)
                 nodes.remove(key); // remove the key
                 MC += t.getNi().size() + 1; // removed edges, plus removed key.

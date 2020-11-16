@@ -89,6 +89,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         public void removeNodeHelper()
         {
             node_info temp;
+
             Iterator<node_info> i = this.nei.values().iterator();
             while (i.hasNext())
             {
@@ -207,12 +208,12 @@ public class WGraph_DS implements weighted_graph, Serializable {
     public Collection<node_info> getV(int node_id)
     {
         NodeInfo n = (NodeInfo) nodes.get(node_id);
-        ArrayList<node_info> arr = new ArrayList<>();
+        ArrayList<node_info> ret = new ArrayList<>();
         for (node_info t : n.nei.values())
         {
-            arr.add(n);
+            ret.add(n);
         }
-        return arr;
+        return ret;
     }
 
     @Override
@@ -238,7 +239,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         NodeInfo n2 = (NodeInfo)nodes.get(node2);
         if (hasEdge(node1, node2))
         {
-            n1.removeNode(nodes.get(n2));
+            n1.removeNode(nodes.get(node2));
             edges--;
             MC++;
         }

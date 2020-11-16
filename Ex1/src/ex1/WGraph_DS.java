@@ -4,21 +4,19 @@ import java.util.*;
 
 public class WGraph_DS implements weighted_graph, Serializable {
 
-    public class NodeInfo implements node_info
+    public class NodeInfo implements node_info, Serializable
     {
         private int key;
         private double tag;
         private String info;
-        private int nodeNumber = 0;
         private HashMap<Integer,node_info> nei;
         private HashMap<Integer, Double> neiWeight;
 
-        public NodeInfo(int key,int tag,String info)
+        public NodeInfo(int key,double tag,String info)
         {
             this.key = key;
             setTag(tag);
             setInfo(info);
-            nodeNumber++;
             this.nei = new HashMap<Integer,node_info>();
             this.neiWeight = new HashMap<Integer, Double>();
         }
@@ -52,6 +50,12 @@ public class WGraph_DS implements weighted_graph, Serializable {
         {
             this.tag = t;
         }
+
+        public double getWeight(int key)
+        {
+            return this.neiWeight.get(key);
+        }
+
         public String toString()
         {
             return "Node ("+getKey()+")";
@@ -108,13 +112,56 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public HashMap<Integer,node_info> nodes;
+        private int nodeNumber;
         public int edges;
         public int  MC;
 
-        public WGraph_DS() {
+        public WGraph_DS()
+        {
             nodes = new HashMap<Integer, node_info>();
+            nodeNumber = 0;
             edges = 0;
             MC =0;
+
+        }
+
+        public WGraph_DS(WGraph_DS g)
+        {
+            if (g != null)
+            {
+                nodes = new HashMap<Integer, node_info>();
+                for (node_info n : g.nodes.values())
+                {
+                    NodeInfo t = new NodeInfo(n.getKey(), n.getTag(), n.getInfo());
+                    nodes.put(t.getKey(), t);
+
+                }
+                for (node_info n : g.nodes.values())
+                {
+                    NodeInfo t = (NodeInfo) n;
+                    int tKey=t.getKey();
+                    NodeInfo temp = (NodeInfo)nodes.get(t.getKey());
+                    for(node_info nei: t.getNeighborMap().values())
+                    {
+                        int neiKey = (nei.getKey());
+
+                        if(!hasEdge(neiKey, temp.getKey()))
+                        {
+                            connect(tKey, neiKey, t.getWeight(neiKey));
+                        }
+                    }
+                }
+                edges = g.edges;
+                MC = g.MC;
+                nodeNumber = g.nodeNumber;
+            }
+            else
+            {
+                nodes = new HashMap<Integer, node_info>();
+                nodeNumber = 0;
+                MC = 0;
+                edges = 0;
+            }
         }
 
     @Override
@@ -149,6 +196,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     public void addNode(int key)
     {   if (!(nodes.containsKey(key)))
         nodes.put(key, new NodeInfo(key)); //puts node in the hashmap
+        nodeNumber++;
         MC++;
     }
 
@@ -157,6 +205,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     {
         NodeInfo n1= (NodeInfo)nodes.get(node1);
         NodeInfo n2= (NodeInfo)nodes.get(node2);
+
         if (n1 == null || n2 == null) { return; }
         if(node1 != node2 && w >= 0)
         {

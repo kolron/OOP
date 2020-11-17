@@ -44,7 +44,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable
         }
 
         Iterator<node_info> i =this.graph.getV().iterator();
-        node_info src = null;
+        node_info src;
         if(i.hasNext())
         {
             src = i.next();
@@ -67,14 +67,13 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable
                 }
             }
         }
-        if(this.graph.nodeSize() == edges.size())
-           return true;
-
-        return false;
+        return this.graph.nodeSize() == edges.size();
     }
+
+
+
     public void Djik(int src, int dest) {
         node_info source = graph.getNode(src);
-        node_info destination = graph.getNode(dest);
         for (node_info n : graph.getV()) {
             n.setTag(-1);
         }
@@ -114,15 +113,60 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable
         if (desti.getTag() == Double.MAX_VALUE)
             return -1;
         Djik(src, dest);
-        System.out.println(desti.getTag());
         return desti.getTag();
     }
 
 
     @Override
-    public List<node_info> shortestPath(int src, int dest) {
-        return null;
+    public List<node_info> shortestPath(int src, int dest)
+    {
+        HashMap<node_info, node_info> parent = new HashMap<>();
+        node_info source = graph.getNode(src);
+        node_info destination = graph.getNode(dest);
+        for (node_info n : graph.getV()) {
+            n.setTag(-1);
+        }
+        PriorityQueue<node_info> pQue = new PriorityQueue<>(new Comperator());
+        source.setTag(0);
+        pQue.add(source);
+        while (!pQue.isEmpty())
+        {
+            WGraph_DS.NodeInfo curr = (WGraph_DS.NodeInfo) pQue.poll();
+            for (node_info n : curr.getNi())
+            {
+                if (n.getTag() == -1)
+                {
+                    n.setTag(curr.getTag() + curr.getWeight(n.getKey()));
+                    pQue.add(n);
+                    parent.put(n,curr);
+                }
+                if(n.getTag() > (curr.getTag() + curr.getWeight(n.getKey())))
+                {
+                    pQue.remove(n);
+                    n.setTag((curr.getTag() + curr.getWeight(n.getKey())));
+                    pQue.add(n);
+                    parent.put(n,curr);
+                }
+            }
+        }
+
+        if (!parent.containsKey(destination))
+        {
+            return null;
+        }
+
+        ArrayList<node_info> path = new ArrayList<>();
+        while(parent.get(destination) != source)
+        {
+            path.add(parent.get(destination));
+            destination = parent.get(destination);
+        }
+        path.add(parent.get(destination));
+        Collections.reverse(path);
+        return path;
     }
+
+
 
     @Override
     public boolean save(String file) {
@@ -154,6 +198,8 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable
             return false;
 
     }
+
+
         private class Comperator implements Comparator<node_info> , Serializable
         {
             @Override
@@ -162,4 +208,5 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable
                 return Double.compare(o1.getTag(), o2.getTag());
             }
         }
+
 }

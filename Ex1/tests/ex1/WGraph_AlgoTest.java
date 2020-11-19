@@ -56,7 +56,7 @@ class WGraph_AlgoTest {
         int[] checkKey = {0, 1, 5, 7, 10};
         int i = 0;
         for(node_info n: sp) {
-           //assertEquals(n.getTag(), checkTag[i]);
+            //assertEquals(n.getTag(), checkTag[i]);
             assertEquals(n.getKey(), checkKey[i]);
             i++;
         }

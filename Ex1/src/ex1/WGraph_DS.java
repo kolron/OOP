@@ -7,24 +7,16 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Class that represents a graph using a hashmap which holds all existing nodes,
      * num of edges, number of all created nodes, and amount of operation made on the graph.
      */
+
     public class NodeInfo implements node_info, Serializable {
+        /** NodeInfo (CLASS)
+         *  Inner class inside WGraph_DS, represents nodes inside the graph.
+         */
         private int key;
         private double tag;
         private String info;
         private HashMap<Integer, node_info> nei;
         private HashMap<Integer, Double> neiWeight;
-
-        /** NodeInfo (CLASS)
-         *  Inner class inside WGraph_DS, represents nodes inside the graph.
-         */
-
-        public NodeInfo(int key, double tag, String info) {
-            this.key = key;
-            setTag(tag);
-            setInfo(info);
-            this.nei = new HashMap<Integer, node_info>();
-            this.neiWeight = new HashMap<Integer, Double>();
-        }
 
         /**
          * NodeInfo(3Args)
@@ -33,14 +25,23 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * An HashMap nei that contains all neighbors and their keys,
          * and an HashMap that contains all neighbors and the weight of the edge to them.
          */
-
-
-        public NodeInfo(int num) {
-            this(num, 0, "");
+        public NodeInfo(int key, double tag, String info) {
+            this.key = key;
+            setTag(tag);
+            setInfo(info);
+            this.nei = new HashMap<Integer, node_info>();
+            this.neiWeight = new HashMap<Integer, Double>();
         }
+
+
+
         /** NodeInfo(1Arg)
          * A constructor that creates a node, with only a given key
          */
+        public NodeInfo(int num) {
+            this(num, 0, "");
+        }
+
 
         @Override
         public int getKey() {
@@ -67,26 +68,21 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.tag = t;
         }
 
-        public double getWeight(int key) {
-            return this.neiWeight.get(key);
-        }
-
         /** getWeight
          * This Function returns the weight of the edge
          * from this NodeInfo to another, using the neiWeight hashmap, which represents the edges' weight
          * from a node to his neighbors.
          */
-
-        public String toString() {
-            return "Node (" + getKey() + ")";
+        public double getWeight(int key) {
+            return this.neiWeight.get(key);
         }
 
-        /**
-         * toString
+
+        /**toString
          * returns a string representing the node's KEY not node's INFO
          */
-        public HashMap<Integer, node_info> getNeighborMap() {
-            return this.nei;
+        public String toString() {
+            return "Node (" + getKey() + ")";
         }
 
         /**
@@ -94,14 +90,23 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * gets a nodes' neighbors using a hashmap (each node has a hashmap of neighbors)
          */
 
-        public Collection<node_info> getNi() {
-            return this.nei.values();
+        public HashMap<Integer, node_info> getNeighborMap() {
+            return this.nei;
         }
+
 
         /** getNi
          * get a collection of this nodes' neighbors.
          */
+        public Collection<node_info> getNi() {
+            return this.nei.values();
+        }
 
+        /**
+         * removeNode
+         * Remove a node from the this nodes' neighbor list(and the other way around), and remove the edge between them.
+         * called to by RemoveNodeHelper
+         */
         public void removeNode(node_info node) {
             if (node != null) {
                 NodeInfo n = (NodeInfo) node;
@@ -112,12 +117,14 @@ public class WGraph_DS implements weighted_graph, Serializable {
             }
         }
 
-        /**
-         * removeNode
-         * Remove a node from the this nodes' neighbor list(and the other way around), and remove the edge between them.
-         * called to by RemoveNodeHelper
-         */
 
+        /**
+         * removeNodeHelper
+         * A helper function to removeNode that uses it
+         * This function disconnects this node from all of it's neighbors,
+         * And the other way around. calls to RemoveNode
+         *
+         */
         public void removeNodeHelper()
         {
             node_info temp;
@@ -128,12 +135,12 @@ public class WGraph_DS implements weighted_graph, Serializable {
                 removeNode(temp);
             }
         }
-        /**
-         * removeNodeHelper
-         * A helper function to removeNode that uses it
-         * This function disconnects this node from all of it's neighbors,
-         * And the other way around. calls to RemoveNode
-         *
+
+        /** equals
+         *  This function replaces the default equals function between two objects.
+         *  It compares this current node to a node "node", by checking if their keys,
+         *  checking if every neighbor of this node is a neighbor to the other node
+         *  and checks if the weight to all neighbors is the same.
          */
 
         public boolean equals(Object o) {
@@ -148,20 +155,17 @@ public class WGraph_DS implements weighted_graph, Serializable {
         }
     }
 
-    /** equals
-     *  This function replaces the default equals function between two objects.
-     *  It compares this current node to a node "node", by checking if their keys,
-     *  checking if every neighbor of this node is a neighbor to the other node
-     *  and checks if the weight to all neighbors is the same.
-     */
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public HashMap<Integer,node_info> nodes;
-        private int nodeNumber;
-        public int edges;
-        public int  MC;
+        public HashMap<Integer,node_info> nodes; //HashMap that hold all nodes in the graph.
+        private int nodeNumber;//'serial number' of nodes
+        public int edges;//number of edges in the graph
+        public int  MC;//Modification Counter
 
+    /**WGraph_DS()
+     * a standard constructor
+     */
         public WGraph_DS()
         {
             nodes = new HashMap<Integer, node_info>();
@@ -171,7 +175,15 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
         }
 
-        public WGraph_DS(WGraph_DS g)
+    /**WGraph_DS(1arg)
+     * @param g is a we wish to copy.
+     * This function creates a deep copy of the graph,
+     * it creates a new graph, and creates a new node for each node in the original graph.
+     * For every node it copies, it copies it's list of neighbors and their weights, and the values of the nodes.
+     * (Note: the function has to once loop over all nodes and copy each node individually
+     *        only then may it start updating each node's HashMaps, that is to avoid NullPointerException)
+     */
+    public WGraph_DS(WGraph_DS g)
         {
             if (g != null)
             {
@@ -219,17 +231,22 @@ public class WGraph_DS implements weighted_graph, Serializable {
         return null;
     }
 
+    /** hasEdge
+     * Checks if 2 nodes are neighbors, if they are there's an edge between them
+     * Checks a node's neighbor Hashmap for the other node, if present then they are neighbors and theres an edge.
+     */
+
     @Override
         public boolean hasEdge(int node1, int node2)
         {
             NodeInfo n = (NodeInfo)nodes.get(node1); // cast to NodeData
             return n.nei.containsKey(node2); //if getNeighborMap has the other node than theres an edge.
         }
-        /** hasEdge
-         * Checks if 2 nodes are neighbors, if they are there's an edge between them
-         * Checks a node's neighbor Hashmap for the other node, if present then they are neighbors and theres an edge.
-         */
 
+    /**GetEdge
+     * returns the weight of and edge between node1 and node2, if it doesn't exist return -1, as all weights are >=0.
+     * Check weight via the HashMap of a nodes neighbors and respective weights.
+     */
     @Override
     public double getEdge(int node1, int node2)
     {
@@ -246,37 +263,54 @@ public class WGraph_DS implements weighted_graph, Serializable {
         MC++;
     }
 
+    /**connect
+     * @param node1 connect this node with
+     * @param node2 this node.
+     * @param w the weight of the edge between them.
+     *
+     * This function connects 2 nodes, and gives their edge the weight w.
+     * first of all check if neither nodes are null or otherwise the same, or the given weight is less than 0 )
+     * second, check if they are already connected, if they are simply update the weight between them if its not already it.
+     * if they aren't connected, connect them by putting each node in the others' HashMap of neighbors, and the HashMap of neighbors with their edges.
+     */
     @Override
-    public void connect(int node1, int node2, double w)
-    {
-        NodeInfo n1= (NodeInfo)nodes.get(node1);
-        NodeInfo n2= (NodeInfo)nodes.get(node2);
+    public void connect(int node1, int node2, double w) {
+        NodeInfo n1 = (NodeInfo) nodes.get(node1);
+        NodeInfo n2 = (NodeInfo) nodes.get(node2);
 
-        if (n1 == null || n2 == null) { return; }
-        if(node1 != node2 && w >= 0)
-        {
-            if (hasEdge(node1, node2))
-            {
-                n1.neiWeight.put(node2, w);
-                n2.neiWeight.put(node1, w);
-                MC++;
-            }
-            else
-            {
-                n1.nei.put(node2, n2);
-                n2.nei.put(node1, n1);
-                n1.neiWeight.put(node2, w);
-                n2.neiWeight.put(node1, w);
-                MC++;
-                edges++;
-            }
+        if (n1 == null || n2 == null) { return;}
+             if (node1 != node2 && w >= 0)
+             {
+                 if (hasEdge(node1, node2))
+                {
+                    n1.neiWeight.put(node2, w);
+                    n2.neiWeight.put(node1, w);
+                     MC++;
+                }
+                else {
+                    n1.nei.put(node2, n2);
+                    n2.nei.put(node1, n1);
+                    n1.neiWeight.put(node2, w);
+                    n2.neiWeight.put(node1, w);
+                    MC++;
+                    edges++;
+                }
 
+            }
         }
-    }
+
+    /** GetV
+     * @return a shallow copy of all the nodes in the graph.
+     */
     @Override
     public Collection<node_info> getV() {
         return this.nodes.values();
     }
+
+    /**getV(1arg)
+     * This function returns a Collection containing all the
+     * nodes connected to node_id, runs in O(K) time, K being node_id's num of neighbors
+     */
     @Override
     public Collection<node_info> getV(int node_id)
     {
@@ -289,6 +323,13 @@ public class WGraph_DS implements weighted_graph, Serializable {
         return ret;
     }
 
+    /** removeNode
+     * @param key the node to be removed.
+     * This function checks whether or not the node is in the graph first.
+     * If it is, remove the corresponding number of edges, and update the MC accordingly,
+     * Removal is being performed by the RemoveNoderHelper, in the Inner class NodeInfo.
+     * It removes a node from all of its neighbors and updates each neighbor's HashMap correctly.
+     */
     @Override
     public node_info removeNode(int key) {
         {
@@ -304,6 +345,13 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }
 
 
+    /**RemoveEdge
+     * @param node1
+     * @param node2
+     * checks if theres an edge to be removed between node1, node2, if there is
+     * call removeNode(N) from NodeInfo class, to surgically remove node1 from node2's HashMaps, and the other way around.
+     * update edges and MC accordingly
+     */
     @Override
     public void removeEdge(int node1, int node2)
     {
@@ -332,6 +380,18 @@ public class WGraph_DS implements weighted_graph, Serializable {
         return MC;
     }
 
+    /** equals
+     *
+     * @param o the graph we are checking equality to
+     * @return true if graphs are equal, false if not.
+     * This function replaces the standard equal function in Object.
+     * graph equality is defined here if all nodes are equal in both graphs.
+     * (Equal nodes are nodes with the same key, Weights, Neighbors.)
+     * First it checks some for some standard requirements for equality (equal size of edges and nodes)
+     * than it checks if every node with a key K is equal to the corresponding node in graph o(=g), with the same key.
+     * than does the same for graph o.
+     * return true only if passed all tests.
+     */
     public boolean equals(Object o)
     {
         WGraph_DS  g = (WGraph_DS) o;

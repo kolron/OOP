@@ -3,31 +3,40 @@ package ex1.tests;
 import ex1.src.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
     class WGraph_DSTest {
         private static Random _rnd = null;
+        private static int _errors = 0, _tests = 0,_number_of_exception=0;
+        private static String _log = "";
 
+        @Test
+        void getNode()
+        {
+            WGraph_DS g0 = new WGraph_DS();
+            g0.addNode(1);
+            assertEquals((g0.getNode(1)).getKey(),1);
+            assertNotNull(g0.getNode(1));
+            assertNull(g0.getNode(2));
 
-
-
+        }
         @Test
         void nodeSize() {
             weighted_graph g = new WGraph_DS();
             g.addNode(0);
             g.addNode(1);
-            g.addNode(1);
+            g.addNode(1); //should be able to add an existing node without crashing, shouldn't increase size
+
+            int s1 = g.nodeSize();
+            assertEquals(2,s1);
 
             g.removeNode(2);
             g.removeNode(1);
-            g.removeNode(1);
-            int s1 = g.nodeSize();
+            g.removeNode(1); //should be able to remove a non existent node.
+             s1 = g.nodeSize();
             assertEquals(1,s1);
 
             g.removeNode(0);
@@ -50,11 +59,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             g.connect(0,3,3);
             g.connect(0,1,1);
             int e_size =  g.edgeSize();
+
+            g.connect(0,1,13); //changing weight should not increase edgeSize
+            e_size =  g.edgeSize();
             assertEquals(3, e_size);
+
+            g.removeEdge(0,1);
+            e_size =  g.edgeSize();
+            assertEquals(2, e_size);
+
+            g.removeEdge(0,1); //should be able to remove edge that isn't there.
+            e_size =  g.edgeSize();
+            assertEquals(2, e_size);
+            assertEquals(-1, g.getEdge(0,1)); //if no edge should return -1 and not null.
+
             double w03 = g.getEdge(0,3);
             double w30 = g.getEdge(3,0);
             assertEquals(w03, w30);
             assertEquals(w03, 3);
+
         }
 
         @Test
@@ -135,10 +158,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             g.connect(0,2,2);
             g.connect(0,3,3);
             g.removeEdge(0,3);
+
             double w = g.getEdge(0,3);
             assertEquals(w,-1);
-        }
 
+        }
 
         ///////////////////////////////////
         /**
@@ -148,6 +172,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
          * @param seed
          * @return
          */
+
         public static weighted_graph graph_creator(int v_size, int e_size, int seed) {
             weighted_graph g = new WGraph_DS();
             _rnd = new Random(seed);

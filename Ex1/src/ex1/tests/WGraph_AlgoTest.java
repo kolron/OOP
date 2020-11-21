@@ -3,7 +3,7 @@ package ex1.tests;
 import ex1.src.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,6 +35,25 @@ class WGraph_AlgoTest {
         ag0.init(g0);
         boolean b = ag0.isConnected();
         assertTrue(b);
+
+        //self made tests.
+        g0 = new WGraph_DS(); //reset graph
+
+        g0.addNode(1);
+        g0.addNode(2);
+        g0.addNode(3);
+        g0.connect(1,2,1);
+        g0.connect(2,3,1);
+        ag0.init(g0);
+        assertTrue(ag0.isConnected());
+        g0.removeEdge(1,2);
+        assertFalse(ag0.isConnected());
+        g0.connect(1,2,1);
+        assertTrue(ag0.isConnected());
+        g0.connect(1,3,1);
+        g0.removeNode(2);
+        assertTrue(ag0.isConnected());
+
     }
 
     @Test
@@ -45,6 +64,33 @@ class WGraph_AlgoTest {
         assertTrue(ag0.isConnected());
         double d = ag0.shortestPathDist(0,10);
         assertEquals(5.1, d);
+
+        //self made tests
+        g0 = new WGraph_DS();
+        g0.addNode(1);
+        g0.addNode(2);
+        g0.addNode(3);
+        g0.addNode(4);
+        g0.connect(1,2,1);
+        g0.connect(2,3,2);
+        g0.connect(3,4,0);
+        g0.connect(4,1,1);
+        ag0.init(g0);
+        assertEquals(1, ag0.shortestPathDist(1,4)); //should be node 1 -> node4
+        assertEquals(1, ag0.shortestPathDist(1,3)); //should go node1->node4->node3
+        assertEquals(1, ag0.shortestPathDist(1,2));
+        assertEquals(2, ag0.shortestPathDist(2,3));
+        assertEquals(0, ag0.shortestPathDist(3,4));
+        g0.connect(1,4,20);
+        assertEquals(3, ag0.shortestPathDist(1,4)); //check if path changed once weight grew.
+        g0.removeNode(2);
+        assertEquals(20, ag0.shortestPathDist(1,4)); // check if traversing only existing nodes.
+        g0.addNode(2);
+        g0.connect(1,2,1);
+        g0.connect(2,3,2);
+        assertEquals(3, ag0.shortestPathDist(1,3)); //should go node1->node2->node3
+
+
     }
 
     @Test
@@ -53,7 +99,7 @@ class WGraph_AlgoTest {
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
         List<node_info> sp = ag0.shortestPath(0,10);
-        //double[] checkTag = {0.0, 1.0, 2.0, 3.1, 5.1};
+
         int[] checkKey = {0, 1, 5, 7, 10};
         int i = 0;
         for(node_info n: sp) {
@@ -61,6 +107,66 @@ class WGraph_AlgoTest {
             assertEquals(n.getKey(), checkKey[i]);
             i++;
         }
+
+        //self made tests
+        //tests will be based off path we know is correct from test ShortestPathDist
+        g0 = new WGraph_DS();
+        g0.addNode(1);
+        g0.addNode(2);
+        g0.addNode(3);
+        g0.addNode(4);
+        g0.connect(1,2,1);
+        g0.connect(2,3,2);
+        g0.connect(3,4,0);
+        g0.connect(4,1,1);
+        ag0.init(g0);
+
+        List<node_info> list1 = ag0.shortestPath(1,2);
+        int[] list1Test = {1, 2};
+         i = 0;
+        for(node_info n: list1) {
+
+            assertEquals(n.getKey(), list1Test[i]);
+            i++;
+        }
+
+        List<node_info> list2 = ag0.shortestPath(1,3);
+        int[] list2Test = {3, 4};
+        i = 0;
+        for(node_info n: list1) {
+
+            assertEquals(n.getKey(), list1Test[i]);
+            i++;
+        }
+
+        List<node_info> list3 = ag0.shortestPath(2,4);
+        int[] list3Test = {2, 1, 4};
+        i = 0;
+        for(node_info n: list1) {
+
+            assertEquals(n.getKey(), list1Test[i]);
+            i++;
+        }
+
+
+        List<node_info> list4 = ag0.shortestPath(1,4);
+        int[] list4Test = {1, 4};
+        i = 0;
+        for(node_info n: list1) {
+
+            assertEquals(n.getKey(), list1Test[i]);
+            i++;
+        }
+
+        List<node_info> list5 = ag0.shortestPath(4,1);
+        int[] list5Test = {4, 1};
+        i = 0;
+        for(node_info n: list1) {
+
+            assertEquals(n.getKey(), list1Test[i]);
+            i++;
+        }
+
     }
 
     @Test

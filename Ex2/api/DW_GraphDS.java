@@ -154,7 +154,7 @@ public class DW_GraphDS implements directed_weighted_graph {
             NodeData removedNode = (NodeData)this.g.get(key);  //get that node and cast him to NodeData
             for (int srcKey : removedNode.getDestOf()) {  //go through each node that has a edge that ends in the node which we want to remove
                 ((NodeData)this.g.get(srcKey)).removeNi(key);  //go to the src node and remove the wanted node from his neighbors hashMap
-                removedNode.removeFromDestOf(srcKey);  //from the wanted node remove the src node from his destOf hashMap
+//                removedNode.removeFromDestOf(srcKey);  //from the wanted node remove the src node from his destOf hashMap
                 this.edgeSize--;  //decrease the amount of edges by 1
                 this.mc++;  //increase the amount of changes in the graph by 1
             }

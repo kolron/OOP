@@ -1,11 +1,15 @@
 package api;
 
-import org.w3c.dom.Node;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.*;
-import java.io.*;
-import com.google.gson.*;
-import org.json.*;
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph g;
@@ -50,38 +54,38 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return graph;
     }
 
-    @Override
-    public boolean isConnected() {
-        if (this.g.nodeSize() < 2) {  //if there is less than 2 nodes in the graph
-            return true;
-        }
-        if (this.g.nodeSize() > this.g.edgeSize() + 1) {  //if there are more nodes then edges+1
-            return false;  //return false
-        }
-        dfs();
-        for (node_data n : this.g.getV()) {
-            NodeData node = (NodeData) n;
-            if (node.getColor() == NodeData.Colors.WHITE) {
-                return false;
-            }
-        }
-        HashMap<node_data, node_data> hash = new HashMap<>(this.pred);
-
-        DW_GraphDS reversedGraph = (DW_GraphDS) reverse_graph(this);
-        this.init(reversedGraph);
-        dfs();
-        for (node_data n : this.g.getV()) {
-            NodeData node = (NodeData) n;
-            if (node.getColor() == NodeData.Colors.WHITE) {
-                this.init(g);
-                this.pred = hash;
-                return false;
-            }
-        }
-        this.init(g);
-        this.pred = hash;
-        return true;
-    }
+//    @Override
+//    public boolean isConnected() {
+//        if (this.g.nodeSize() < 2) {  //if there is less than 2 nodes in the graph
+//            return true;
+//        }
+//        if (this.g.nodeSize() > this.g.edgeSize() + 1) {  //if there are more nodes then edges+1
+//            return false;  //return false
+//        }
+//        dfs();
+//        for (node_data n : this.g.getV()) {
+//            NodeData node = (NodeData) n;
+//            if (node.getColor() == NodeData.Colors.WHITE) {
+//                return false;
+//            }
+//        }
+//        HashMap<node_data, node_data> hash = new HashMap<>(this.pred);
+//        DW_GraphDS originalGraph = (DW_GraphDS) this.g;
+//        DW_GraphDS reversedGraph = (DW_GraphDS) reverse_graph(this);
+//        this.init(reversedGraph);
+//        dfs();
+//        for (node_data n : this.g.getV()) {
+//            NodeData node = (NodeData) n;
+//            if (node.getColor() == NodeData.Colors.WHITE) {
+//                this.init(originalGraph);
+//                this.pred = hash;
+//                return false;
+//            }
+//        }
+//        this.init(originalGraph);
+//        this.pred = hash;
+//        return true;
+//    }
 
     @Override
     public double shortestPathDist(int src, int dest) {
@@ -219,36 +223,44 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return false;
     }
 
-    private void dfs() {
+    //TODO insert here
+    private void dfs(NodeData srcNode) {
         for (node_data n : this.g.getV()) {
             NodeData node = (NodeData) n;
             node.setColor(NodeData.Colors.WHITE);
         }
-        pred.clear();
-//        time = 0;    //TODO in pseudo code there is a time variables
-        for (node_data n : this.g.getV()) {
-            NodeData node = (NodeData) n;
-            dfs_visit(node);
-            break;
-        }
+        dfs_visit(srcNode);
     }
 
-
-
     private void dfs_visit (NodeData node){
-            node.setColor(NodeData.Colors.GREY);
-//        time = time + 1 ;
-//        node.setFirstTime(time);
-            for (edge_data edge : node.getNi()) {
-                NodeData neighbor = (NodeData) (this.g.getNode(edge.getDest()));
-                if (neighbor.getColor() == NodeData.Colors.WHITE) {
-                    pred.put(neighbor, node);
-                    dfs_visit(neighbor);
-                }
+        node.setColor(NodeData.Colors.GREY);
+        for (edge_data edge : node.getNi()) {
+            NodeData neighbor = (NodeData) (this.g.getNode(edge.getDest()));
+            if (neighbor.getColor() == NodeData.Colors.WHITE) {
+                dfs_visit(neighbor);
             }
-            node.setColor(NodeData.Colors.BLACK);
-//        node.setLastTime = ++time;
         }
+        node.setColor(NodeData.Colors.BLACK);
+    }
+
+    private void dfs(NodeData srcNode, HashMap<Integer, node_data> nodes) {
+        for (node_data n : nodes.values()) {
+            NodeData node = (NodeData) n;
+            node.setColor(NodeData.Colors.WHITE);
+        }
+        dfs_visit(srcNode, nodes);
+    }
+
+    private void dfs_visit (NodeData node, HashMap<Integer, node_data> nodes){
+        node.setColor(NodeData.Colors.GREY);
+        for (edge_data edge : node.getNi()) {
+            NodeData neighbor = (NodeData) (nodes.get(edge.getDest()));
+            if (neighbor.getColor() == NodeData.Colors.WHITE) {
+                dfs_visit(neighbor, nodes);
+            }
+        }
+        node.setColor(NodeData.Colors.BLACK);
+    }
 
         private void Dijkstra ( int src, int dist){
 
@@ -294,18 +306,23 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
             }
         }
-        public directed_weighted_graph reverse_graph (dw_graph_algorithms g){
-
-            DW_GraphDS g1 = (DW_GraphDS) g.copy();
-            for (node_data n : g1.getV()) {
-                NodeData node = (NodeData) n;
-
+        public HashMap<Integer, node_data> reverse_graph (directed_weighted_graph g) {
+            DW_GraphDS graph = (DW_GraphDS)g;
+            HashMap<Integer, node_data> nodes = new HashMap<>();
+            for (node_data node : graph.getV()) {
+                NodeData temp = new NodeData(node);
+                nodes.put(temp.getKey(), temp);
+            }
+            for (node_data n : graph.getV()) {
+                NodeData node = (NodeData)n;
                 for (edge_data e : node.getNi()) {
-                    EdgeData edge = (EdgeData) e;
-                    reverse_edge(g1, edge);
+                    EdgeData edge = (EdgeData)e;
+                    EdgeData newEdge = new EdgeData(edge.getDest(), edge.getSrc(), edge.getWeight(), "", 1);
+                    ((NodeData)nodes.get(edge.getDest())).addNi(nodes.get(edge.getSrc()), newEdge);
+                    ((NodeData)nodes.get(edge.getSrc())).addNeighborOf(nodes.get(edge.getDest()));
                 }
             }
-            return g1;
+            return nodes;
         }
 
 
@@ -316,4 +333,41 @@ public class DWGraph_Algo implements dw_graph_algorithms {
                 return Double.compare(o1.getTag(), o2.getTag());
             }
         }
+
+
+    @Override
+    public boolean isConnected() {
+        if (this.g.nodeSize() < 2){
+            return true;
+        }
+        if (this.g.nodeSize() > this.g.edgeSize() + 1) {  //if there are more nodes then edges+1
+            return false;  //return false
+        }
+        NodeData srcNode = null;
+        for (node_data n : this.g.getV()) {
+            srcNode = (NodeData)n;
+            break;
+        }
+        dfs(srcNode);
+        for (node_data n : this.g.getV()) {
+            NodeData node = (NodeData) n;
+            if (node.getColor() == NodeData.Colors.WHITE){
+                return false;
+            }
+        }
+        DW_GraphDS reversedGraph = (DW_GraphDS) this.copy();
+        HashMap<node_data, node_data> tempPred = new HashMap<>(this.pred);
+        HashMap<Integer, node_data> reversed = new HashMap<>();
+        reversed = reverse_graph(reversedGraph);
+
+        srcNode =(NodeData) reversed.get(srcNode.getKey());
+        dfs(srcNode, reversed);
+        for (node_data n : reversed.values()) {
+            NodeData node = (NodeData) n;
+            if (node.getColor() == NodeData.Colors.WHITE){
+                return false;
+            }
+        }
+        return true;
     }
+}

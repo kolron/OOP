@@ -184,9 +184,9 @@ public class DW_Graph_Algo_Test {
         g1.connect(1, 2, 1);
         g1.connect(2, 3, 1);
         ag0.load(str);
-        assertEquals(g0,g1); //TODO write a correct compere function to check if graphgs are equal or not.
+        assertEquals(ag0.getGraph(),g1); //TODO write a correct compere function to check if graphgs are equal or not.
         g0.removeNode(1);
-        assertNotEquals(g0,g1);
+        assertNotEquals(ag0.getGraph(),g1);
 
 
 

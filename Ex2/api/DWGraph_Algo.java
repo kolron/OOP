@@ -54,39 +54,6 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return graph;
     }
 
-//    @Override
-//    public boolean isConnected() {
-//        if (this.g.nodeSize() < 2) {  //if there is less than 2 nodes in the graph
-//            return true;
-//        }
-//        if (this.g.nodeSize() > this.g.edgeSize() + 1) {  //if there are more nodes then edges+1
-//            return false;  //return false
-//        }
-//        dfs();
-//        for (node_data n : this.g.getV()) {
-//            NodeData node = (NodeData) n;
-//            if (node.getColor() == NodeData.Colors.WHITE) {
-//                return false;
-//            }
-//        }
-//        HashMap<node_data, node_data> hash = new HashMap<>(this.pred);
-//        DW_GraphDS originalGraph = (DW_GraphDS) this.g;
-//        DW_GraphDS reversedGraph = (DW_GraphDS) reverse_graph(this);
-//        this.init(reversedGraph);
-//        dfs();
-//        for (node_data n : this.g.getV()) {
-//            NodeData node = (NodeData) n;
-//            if (node.getColor() == NodeData.Colors.WHITE) {
-//                this.init(originalGraph);
-//                this.pred = hash;
-//                return false;
-//            }
-//        }
-//        this.init(originalGraph);
-//        this.pred = hash;
-//        return true;
-//    }
-
     @Override
     public double shortestPathDist(int src, int dest) {
         if (this.g.getNode(src) != null && this.g.getNode(dest) != null) {  //if the nodes are in the graph
@@ -163,8 +130,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         Iterator<node_data> nodeItr = g.getV().iterator();
         while (nodeItr.hasNext()) { //Iterate over all the nodes
             nodes.put(jsonNodes(nodeItr.next())); // add each node to node array as a JSONObject
-            }
-
+        }
 
         nodeItr = g.getV().iterator(); //remake node Iterator
         while(nodeItr.hasNext()) {
@@ -213,7 +179,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             Gson gs = build.create();
             FileReader reader = new FileReader(file);
             this.g = gs.fromJson(reader, DW_GraphDS.class);
-            System.out.println(this.g);
+            //System.out.println(this.g);
             return true;
 
         } catch (Exception e)

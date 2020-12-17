@@ -18,6 +18,7 @@ public class Panel extends JPanel {
     private ArrayList<CL_Pokemon> pokemons;
     private Range xr;
     private Range yr;
+    private long time;
 
     public Panel ()
     {
@@ -32,6 +33,7 @@ public class Panel extends JPanel {
     @Override
     public void paint(Graphics g)
     {
+        g.drawString("Time:" + this.time, 30,30);
         // paint Nodes
         if(graph!=null)
         {
@@ -49,6 +51,7 @@ public class Panel extends JPanel {
                     g.drawLine((int)l.x(),(int)l.y(),(int)l2.x(),(int)l2.y());
                 }
             }
+
             g.setColor(Color.RED);
             for (CL_Agent agent:agents)
             {

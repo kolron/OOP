@@ -64,6 +64,6 @@ public class GUI extends JFrame implements Runnable
         }
         gui.panel.update(gui.graph,gui.agents,gui.pokemons);
         gui.repaint();
-        //g.panel.update();  //TODO fix save_load and check if what we did is good
+        gui.panel.update(gui.graph,gui.agents,gui.pokemons);  //TODO fix save_load and check if what we did is good
     }
 }

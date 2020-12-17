@@ -55,7 +55,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return graph;
     }
 
-
+    /** isConnected
+     * a method to check if a graph is strongly connected, works by calling DFS twice,
+     * once on the graph and a second time on the grapg but reversed(same nodes, edges reversed).
+     */
     @Override
     public boolean isConnected() {
         if (this.g.nodeSize() < 2){
@@ -92,6 +95,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return true;
     }
 
+    /** shortestPathDist
+     * Method to find the shortest distance (edge weight) from src to dest
+     * uses djikstra's algorithm.
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
         if (this.g.getNode(src) != null && this.g.getNode(dest) != null) {  //if the nodes are in the graph
@@ -105,6 +112,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return -1;  //if one of the nodes are not in the graph return -1
     }
 
+    /** shorestPath
+     * method to return the shrotest path in an arrayList from node src to dest
+     * this method too uses djikstra's algorithm, and adds the correct path but in a reverse order
+     * so in the end it reverses the insertion order so the path will be correct.
+     */
     @Override
     public List<node_data> shortestPath(int src, int dest) {
         ArrayList<node_data> path = new ArrayList<node_data>();  //create new arrayList
@@ -133,6 +145,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return null;  //if the nodes are not in the graph
     }
 
+    /** save
+     * @param file - the file name (may include a relative path).
+     * @return true if we successfully loaded the file
+     * method to save a graph to a file using JSON formatting
+     * writes the JSON using the jasonGraph method below
+     */
     @Override
     public boolean save(String file) {
         String json;
@@ -320,7 +338,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         }
     }
 
-    //TODO insert here
+    /** dfs
+     * Depth-First search method that traverses the graph and
+     * helps with checking for connectivity.
+     * first it resets every node's color to white, than calls the dfs_visit
+     * method on the the node from which we start traversal.
+     */
     private void dfs(NodeData srcNode) {
         for (node_data n : this.g.getV()) {
             NodeData node = (NodeData) n;
@@ -329,6 +352,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         dfs_visit(srcNode);
     }
 
+    /** dfs_visit
+     * method call upon by dfs.
+     * it checks whether or not we saw the node already (if it's color is white).
+     * If we haven't seen a node already, and reached it in the algorithm(only possible if there's a path to it)
+     * changes it's color to grey or black, (Grey if we haven't finished dealing with the node's neighbors, black if we have).
+     */
     private void dfs_visit (NodeData node){
         node.setColor(NodeData.Colors.GREY);
         for (edge_data edge : node.getNi()) {
@@ -340,6 +369,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         node.setColor(NodeData.Colors.BLACK);
     }
 
+    /** dfs(arg1, arg2)
+     * a similar dfs method as before, now also takes a hashmap nodes to represent the nodes in the graph.
+     * This method is useful and required for our isConnected method, as this dfs works on the reversed graph.
+     */
     private void dfs(NodeData srcNode, HashMap<Integer, node_data> nodes) {
         for (node_data n : nodes.values()) {
             NodeData node = (NodeData) n;
@@ -348,6 +381,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         dfs_visit(srcNode, nodes);
     }
 
+    /** dfs_visit(arg1, arg2)
+     * same as the dfs method above.
+     * works the same way as the previous dfs_visit method.
+     * needed for the isConnected method for the reversed graph.
+     */
     private void dfs_visit (NodeData node, HashMap<Integer, node_data> nodes){
         node.setColor(NodeData.Colors.GREY);
         for (edge_data edge : node.getNi()) {
@@ -359,6 +397,9 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         node.setColor(NodeData.Colors.BLACK);
     }
 
+    /** Dijkstra
+     *
+     */
     private void Dijkstra ( int src, int dist){
 
         PriorityQueue<NodeData> pQueue = new PriorityQueue<NodeData>(this.g.nodeSize(), new NodeInfoCompare());  //create priorityQueue

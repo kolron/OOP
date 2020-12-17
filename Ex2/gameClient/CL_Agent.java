@@ -20,7 +20,7 @@ public class CL_Agent implements Runnable {
 		private directed_weighted_graph _gg;
 		private CL_Pokemon _curr_fruit;
 		private long _sg_dt;
-		
+		private Controller controller;
 		private double _value;
 		
 		
@@ -58,8 +58,15 @@ public class CL_Agent implements Runnable {
 				e.printStackTrace();
 			}
 		}
+
+		public void setController(Controller commander)
+		{
+		this.controller = commander;
+		}
+
 		//@Override
 		public int getSrcNode() {return this._curr_node.getKey();}
+
 		public String toJSON() {
 			int d = this.getNextNode();
 			String ans = "{\"Agent\":{"

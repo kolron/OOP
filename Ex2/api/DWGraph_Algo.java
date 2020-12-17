@@ -397,8 +397,24 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         node.setColor(NodeData.Colors.BLACK);
     }
 
-    /** Dijkstra
+    /** Djikstra
+     * This is an implementation of Djikstra's algorithm
+     * @param src the node we start traversal from.
+     * Algorithm finds smallest weight to each node from a node src, using a priority queue.
+     * To set and hold the accumulative weight to a node, I used the Tag field on each node.
+     * we started off by creating an Comparator to compare to nodes using their tag.
+     * set all tags of all nodes to -1, meaning we have yet to see them. The first time we see a node we update it's tag to the accumulative
+     * weight it took to reach it. since Weights are >= 0, -1 means we have yet to update the node.
      *
+     * Created a priority queue to compare and sort the nodes.
+     * Added source to the Priority Queue (=pQue)
+     * now, for each node in the graph, starting with src,
+     *            poll from queue, and for each of it's neighbors:
+     *            if we have yet to set its tag even once, set the accumuliatve starting weight, and add the neighbor to the pQue.
+     *            if we have seen the node before (tag!=1) check if its current weight is larger than the one we reaced it with in this iteration (if yes than current route = better)
+     *            add n to the pQue.
+     * once the pQue is empty we have finished traversal and found the shortest weight to each node from node src, and the tags are representing that weight.
+     * we can now use this algorithm to check what the smallest distance is, and with a slight modification we can find the exact path.
      */
     private void Dijkstra ( int src, int dist){
 
@@ -444,6 +460,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
         }
     }
+
+    /** reverse_graph
+     * @param g the graph we wish to reverse
+     * a method to reverse a graph(e.g. reverse it's edges' src and dest.)
+     * while method isn't returning a new DW_GraphDS object, It returns a HashMap
+     * representing the reversed graph
+     */
     public HashMap<Integer, node_data> reverse_graph (directed_weighted_graph g) {
         DW_GraphDS graph = (DW_GraphDS)g;
         HashMap<Integer, node_data> nodes = new HashMap<>();

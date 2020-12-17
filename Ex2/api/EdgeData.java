@@ -39,12 +39,12 @@ public class EdgeData implements edge_data{
 
     public void setWeight(double w) {
 
-         if(w>0)
-         {
-             this.weight = w;
-         }
-         else{
-        throw new ArithmeticException("Weight must be greater than 0");
+        if(w>0)
+        {
+            this.weight = w;
+        }
+        else{
+            throw new ArithmeticException("Weight must be greater than 0");
         }
     }
 

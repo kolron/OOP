@@ -25,9 +25,11 @@ public class Range2Range {
 		Point3D ans = _world.fromPortion(d);
 		return ans;
 	}
+
 	public Range2D getWorld() {
 		return _world;
 	}
+
 	public Range2D getFrame() {
 		return _frame;
 	}

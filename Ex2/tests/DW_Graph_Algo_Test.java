@@ -13,28 +13,20 @@ public class DW_Graph_Algo_Test {
 
         directed_weighted_graph g0 = new DW_GraphDS();
         dw_graph_algorithms ag0 = new DWGraph_Algo();
-        node_data n0 = new NodeData(0);
         node_data n1 = new NodeData(1);
         node_data n2 = new NodeData(2);
         node_data n3 = new NodeData(3);
         ag0.init(g0);
-
-        //  g0.addNode(n0);
         g0.addNode(n1);
         assertTrue(ag0.isConnected());
         g0.addNode(n2);
         g0.addNode(n3);
         g0.connect(1, 2, 1);
         g0.connect(2, 3, 1);
-        assertFalse(ag0.isConnected());
-
-
-
-
-
+      assertFalse(ag0.isConnected());
 
         g0.connect(3, 2, 1);
-        assertFalse(ag0.isConnected());
+       assertFalse(ag0.isConnected());
         g0.connect(3, 1, 1);
         assertTrue(ag0.isConnected());
 
@@ -46,6 +38,12 @@ public class DW_Graph_Algo_Test {
         g0.connect(1, 3, 1);
         g0.removeNode(2);
         assertTrue(ag0.isConnected());
+
+        node_data n0 = new NodeData(0);
+        g0.addNode(n0);
+        assertFalse(ag0.isConnected());
+
+
 
     }
 
@@ -170,7 +168,7 @@ public class DW_Graph_Algo_Test {
         g0.addNode(n3);
         g0.connect(1, 2, 1);
         g0.connect(2, 3, 1);
-        String str = "g0.obj";
+        String str = "g0.object";
         ag0.save(str);
 
         directed_weighted_graph g1 = new DW_GraphDS();
@@ -184,9 +182,9 @@ public class DW_Graph_Algo_Test {
         g1.connect(1, 2, 1);
         g1.connect(2, 3, 1);
         ag0.load(str);
-        assertEquals(g0,g1); //TODO write a correct compere function to check if graphgs are equal or not.
+        assertEquals(ag0.getGraph(),g1); //TODO write a correct compere function to check if graphgs are equal or not.
         g0.removeNode(1);
-        assertNotEquals(g0,g1);
+        assertNotEquals(ag0.getGraph(),g1);
 
 
 

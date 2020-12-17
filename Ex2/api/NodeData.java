@@ -22,6 +22,30 @@ public class NodeData implements node_data{
     private Colors color;
     private double pathDist;
 
+    public NodeData(node_data n) {
+        NodeData node = (NodeData)n;
+        this.key = node.key;
+        this.location = node.location;
+        this.weight = node.weight;
+        this.info = "NEW!";
+        this.tag = node.tag;
+        this.neighbors = new HashMap<>();
+        this.destOf = new HashSet<>();
+        this.color = node.getColor();
+    }
+//    public NodeData(node_data n) {
+//        NodeData node = (NodeData)n;
+//        this.key = node.key;
+//        this.location = node.location;
+//        this.weight = node.weight;
+//        this.pathDist = node.pathDist;
+//        this.info = node.info;
+//        this.tag = node.tag;
+//        this.neighbors = node.neighbors;
+//        this.destOf = node.destOf;
+//        this.color = node.getColor();
+//    }
+
     public NodeData(int key, geo_location location, double weight, String info, int tag, HashMap<Integer, edge_data> neighbors, HashSet<Integer> destOf) {
         this.key = key;
         this.location = location;

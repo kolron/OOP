@@ -71,4 +71,28 @@ public class EdgeData implements edge_data{
     public void setTag(int t) {
         this.tag = t;
     }
+
+    public class WrapedEdgeData{
+        private int src;
+        private int dest;
+        private double w;
+
+        public WrapedEdgeData(){
+            src = EdgeData.this.src;
+            dest = EdgeData.this.dest;
+            w = EdgeData.this.weight;
+        }
+
+        public int getSrc() {
+            return src;
+        }
+
+        public int getDest() {
+            return dest;
+        }
+
+        public double getW() {
+            return w;
+        }
+    }
 }

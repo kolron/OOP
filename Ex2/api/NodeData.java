@@ -33,18 +33,6 @@ public class NodeData implements node_data{
         this.destOf = new HashSet<>();
         this.color = node.getColor();
     }
-//    public NodeData(node_data n) {
-//        NodeData node = (NodeData)n;
-//        this.key = node.key;
-//        this.location = node.location;
-//        this.weight = node.weight;
-//        this.pathDist = node.pathDist;
-//        this.info = node.info;
-//        this.tag = node.tag;
-//        this.neighbors = node.neighbors;
-//        this.destOf = node.destOf;
-//        this.color = node.getColor();
-//    }
 
     public NodeData(int key, geo_location location, double weight, String info, int tag, HashMap<Integer, edge_data> neighbors, HashSet<Integer> destOf) {
         this.key = key;
@@ -78,6 +66,26 @@ public class NodeData implements node_data{
         this.destOf =  new HashSet<Integer>();
         this.color = Colors.WHITE;
         this.pathDist = pathDist;
+    }
+
+    public NodeData(WarpedNodeData wrapedNode){
+        if(wrapedNode==null)
+            return;
+        String positions [] = wrapedNode.pos.split(",");
+        if(positions.length!=3) {
+            return;
+        }
+        this.key = wrapedNode.id;
+
+        this.color = Colors.WHITE;
+        this.neighbors = new HashMap<Integer, edge_data>();
+        this.destOf = new HashSet<>();
+        location = new GeoLocation(Double.parseDouble(positions[0]),Double.parseDouble(positions[1]),Double.parseDouble(positions[2]));
+        this.tag = 0;
+        this.info = "";
+        this.weight = 0;
+        this.pathDist = pathDist;
+
     }
 
 
@@ -187,5 +195,28 @@ public class NodeData implements node_data{
     //function that return all the keys of the nodes which points to this node (the edge is the "other node -> this node")
     public Collection<Integer> getDestOf(){
         return this.destOf;  //return the destOf hashSet
+    }
+
+    public class WarpedNodeData{
+        private String pos;
+        private int id;
+
+        public WarpedNodeData() {
+            if (NodeData.this.location == null){
+                pos = "0,0,0";
+            }
+            else{
+                pos = NodeData.this.location.x() + "," + NodeData.this.location.y() + "," + NodeData.this.location.z();
+            }
+            id = NodeData.this.key;
+        }
+
+        public String getPos() {
+            return pos;
+        }
+
+        public int getId() {
+            return id;
+        }
     }
 }

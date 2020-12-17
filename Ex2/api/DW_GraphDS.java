@@ -1,5 +1,6 @@
 package api;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +28,18 @@ public class DW_GraphDS implements directed_weighted_graph {
         this.keys = new HashSet<Integer>();
         this.edgeSize = 0;
         this.mc = 0;
+    }
+
+    public DW_GraphDS(WrapedDW_GraphDS wrapDWGraph_ds)
+    {
+        this();
+        for (NodeData.WarpedNodeData wrapedNode:  wrapDWGraph_ds.Nodes) {
+            addNode(new NodeData(wrapedNode));
+        }
+        for(EdgeData.WrapedEdgeData wrapedEdge: wrapDWGraph_ds.Edges) {
+            connect(wrapedEdge.getSrc(),wrapedEdge.getDest(),wrapedEdge.getW());
+        }
+
     }
 
 
@@ -246,5 +259,25 @@ public class DW_GraphDS implements directed_weighted_graph {
             if ((this.getNode(n.getKey()) == null || !(g.getNode(n.getKey())).equals(n))) return false;
         }
         return true;
+    }
+
+
+    public class WrapedDW_GraphDS{
+        private ArrayList<EdgeData.WrapedEdgeData> Edges;
+        private ArrayList<NodeData.WarpedNodeData> Nodes;
+
+        public WrapedDW_GraphDS(){
+            for (node_data n :DW_GraphDS.this.getV()) {
+                NodeData node = (NodeData) n;
+                NodeData.WarpedNodeData wrapedNode = node.new WarpedNodeData();
+                Nodes.add(wrapedNode);
+
+                for (edge_data e : node.getNi()) {
+                    EdgeData edge = (EdgeData) e;
+                    EdgeData.WrapedEdgeData wrapedEdge = edge.new WrapedEdgeData();
+                    Edges.add(wrapedEdge);
+                }
+            }
+        }
     }
 }

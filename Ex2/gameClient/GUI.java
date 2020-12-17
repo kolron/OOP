@@ -36,14 +36,18 @@ public class GUI extends JFrame implements Runnable
         setVisible(true);
         repaint();
     }
-    public static void main(String args [])
+
+    public static void main(String[] args)
     {
         game_service game = Game_Server_Ex2.getServer(11);
         System.out.println(game);
         GUI gui = new GUI();
         GsonBuilder builder = new GsonBuilder();
         Gson gs = builder.create();
-        gui.graph = gs.fromJson(game.getGraph(), DW_GraphDS.class);
+//        gui.graph = gs.fromJson(game.getGraph(), DW_GraphDS.class);
+        Gson gson = new Gson();
+        DW_GraphDS.WrapedDW_GraphDS wrapedGraph = gson.fromJson(game.getGraph(), DW_GraphDS.WrapedDW_GraphDS.class);
+        gui.graph = new DW_GraphDS((DW_GraphDS.WrapedDW_GraphDS) wrapedGraph);
         gui.pokemons = Arena.json2Pokemons(game.getPokemons());
         gui.agents = new ArrayList<>();
         try {
@@ -54,8 +58,8 @@ public class GUI extends JFrame implements Runnable
                 CL_Agent newAgent = new CL_Agent(gui.graph,i);
                 gui.agents.add(newAgent);
             }
-            gameServer = new JSONObject(game.getAgents());
-            JSONArray arr = gameServer.getJSONArray("Agents");
+            gameServer = new JSONObject(game.getAgents());   //TODO check getAgents function and why she return something weird
+            JSONArray arr = gameServer.getJSONArray("agents");
             for (int i = 0; i <arr.length() ; i++) {
                 gui.agents.get(i).update(arr.get(i).toString());
             }

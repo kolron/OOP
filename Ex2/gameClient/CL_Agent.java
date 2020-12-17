@@ -1,9 +1,6 @@
  package gameClient;
 
-import api.directed_weighted_graph;
-import api.edge_data;
-import api.geo_location;
-import api.node_data;
+import api.*;
 import gameClient.util.Point3D;
 import org.json.JSONObject;
 
@@ -20,8 +17,12 @@ public class CL_Agent implements Runnable {
 		private directed_weighted_graph _gg;
 		private CL_Pokemon _curr_fruit;
 		private long _sg_dt;
-		private Controller controller;
+		private Controller controller;  //TODO maybe remove controller from agent
 		private double _value;
+
+
+	private game_service gameService;
+
 		
 		
 		public CL_Agent(directed_weighted_graph g, int start_node) {
@@ -37,17 +38,17 @@ public class CL_Agent implements Runnable {
 			try {
 				// "GameServer":{"graph":"A0","pokemons":3,"agents":1}}
 				line = new JSONObject(json);
-				JSONObject ttt = line.getJSONObject("Agent");
-				int id = ttt.getInt("id");
+				JSONObject agent = line.getJSONObject("Agent");
+				int id = agent.getInt("id");
 				if(id==this.getID() || this.getID() == -1) {
 					if(this.getID() == -1) {_id = id;}
-					double speed = ttt.getDouble("speed");
-					String p = ttt.getString("pos");
-					Point3D pp = new Point3D(p);
-					int src = ttt.getInt("src");
-					int dest = ttt.getInt("dest");
-					double value = ttt.getDouble("value");
-					this._pos = pp;
+					double speed = agent.getDouble("speed");
+					String position = agent.getString("pos");
+					Point3D position3D = new Point3D(position);
+					int src = agent.getInt("src");
+					int dest = agent.getInt("dest");
+					double value = agent.getDouble("value");
+					this._pos = position3D;
 					this.setCurrNode(src);
 					this.setSpeed(speed);
 					this.setNextNode(dest);
@@ -173,6 +174,10 @@ public class CL_Agent implements Runnable {
 		public void set_sg_dt(long _sg_dt) {
 			this._sg_dt = _sg_dt;
 		}
+
+	public void setGameService(game_service gameService) {
+		this.gameService = gameService;
+	}
 
 	@Override
 	public void run() {

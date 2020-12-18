@@ -10,4 +10,6 @@ public class AgentsAlgo {
     private ArrayList<CL_Agent> agents;
     private ArrayList<CL_Pokemon> pokemons;
     private DW_GraphDS graph;
+
+
 }

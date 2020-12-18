@@ -38,25 +38,25 @@ public class Panel extends JPanel {
         if(graph!=null)
         {
             Range2Range t = Arena.w2f(graph,new Range2D(xr,yr));
-            for (node_data n : graph.getV())
+            for (node_data node : graph.getV())
             {
-                geo_location l =  t.world2frame(n.getLocation());
+                geo_location nodeLocation =  t.world2frame(node.getLocation());
                 g.setColor(Color.BLACK);
-                g.fillOval((int) l.x()-5, (int)l.y()-5, 10,10);
-                for(edge_data e :graph.getE(n.getKey())) // paint lines
+                g.fillOval((int) nodeLocation.x()-5, (int)nodeLocation.y()-5, 10,10);
+                for(edge_data edge :graph.getE(node.getKey())) // paint lines
                 {
-                    node_data t1 = graph.getNode(e.getDest());
-                    geo_location l2 = t.world2frame(t1.getLocation());
+                    node_data destNode = graph.getNode(edge.getDest());
+                    geo_location destNodeLocation = t.world2frame(destNode.getLocation());
                     g.setColor(Color.gray);
-                    g.drawLine((int)l.x(),(int)l.y(),(int)l2.x(),(int)l2.y());
+                    g.drawLine((int)nodeLocation.x(),(int)nodeLocation.y(),(int)destNodeLocation.x(),(int)destNodeLocation.y());
                 }
             }
 
             g.setColor(Color.RED);
             for (CL_Agent agent:agents)
             {
-                geo_location l = t.world2frame(agent.getLocation());
-                g.fillOval((int)l.x()-8,(int)l.y()-8,15,15);
+                geo_location agentLocation = t.world2frame(agent.getLocation());
+                g.fillOval((int)agentLocation.x()-8,(int)agentLocation.y()-8,15,15);
             }
             // pokemons
             for (CL_Pokemon pokemon:pokemons)
@@ -67,8 +67,8 @@ public class Panel extends JPanel {
                 else {
                     g.setColor(Color.yellow);
                 }
-                geo_location l = t.world2frame(pokemon.getLocation());
-                g.fillOval((int)l.x()-8,(int)l.y()-8,15,15);
+                geo_location pokemonLocation = t.world2frame(pokemon.getLocation());
+                g.fillOval((int)pokemonLocation.x()-8,(int)pokemonLocation.y()-8,15,15);
             }
         }
     }

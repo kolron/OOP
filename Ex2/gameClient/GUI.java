@@ -44,7 +44,6 @@ public class GUI extends JFrame implements Runnable
         GUI gui = new GUI();
         GsonBuilder builder = new GsonBuilder();
         Gson gs = builder.create();
-//        gui.graph = gs.fromJson(game.getGraph(), DW_GraphDS.class);
         Gson gson = new Gson();
         DW_GraphDS.WrapedDW_GraphDS wrapedGraph = gson.fromJson(game.getGraph(), DW_GraphDS.WrapedDW_GraphDS.class);
         gui.graph = new DW_GraphDS((DW_GraphDS.WrapedDW_GraphDS) wrapedGraph);
@@ -57,9 +56,10 @@ public class GUI extends JFrame implements Runnable
             {
                 CL_Agent newAgent = new CL_Agent(gui.graph,i);
                 gui.agents.add(newAgent);
+                game.addAgent(0);
             }
             gameServer = new JSONObject(game.getAgents());   //TODO check getAgents function and why she return something weird
-            JSONArray arr = gameServer.getJSONArray("agents");
+            JSONArray arr = gameServer.getJSONArray("Agents");
             for (int i = 0; i <arr.length() ; i++) {
                 gui.agents.get(i).update(arr.get(i).toString());
             }
@@ -67,7 +67,8 @@ public class GUI extends JFrame implements Runnable
             e.printStackTrace();
         }
         gui.panel.update(gui.graph,gui.agents,gui.pokemons);
+        gui.setVisible(true);
         gui.repaint();
-        gui.panel.update(gui.graph,gui.agents,gui.pokemons);  //TODO fix save_load and check if what we did is good
+        gui.panel.update(gui.graph,gui.agents,gui.pokemons);
     }
 }

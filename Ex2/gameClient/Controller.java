@@ -2,6 +2,7 @@ package gameClient;
 
 import api.DW_GraphDS;
 import api.game_service;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -17,8 +18,9 @@ public class Controller implements Runnable
 
     public Controller(game_service game)
     {
+        Gson gson = new Gson();
         this.currGame = game;
-        this.graph = new DW_GraphDS(); //TODO load correctly from game JSON, not sure how to do that, LOAD is 100% working though, so figure it out.
+        this.graph = new DW_GraphDS((DW_GraphDS.WrapedDW_GraphDS) gson.fromJson(game.getGraph(), DW_GraphDS.WrapedDW_GraphDS.class));
         this.agents = new ArrayList<>();
         this.agentsThreads = new ArrayList<>();
         //TODO as per last todo you gotta load everything from the JSON into here.

@@ -20,6 +20,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         this.g = null;
         pred = new HashMap<node_data, node_data>();
     }
+    public DWGraph_Algo(DW_GraphDS graph) {
+        this.g = graph;
+        pred = new HashMap<node_data, node_data>();
+    }
 
 
     @Override

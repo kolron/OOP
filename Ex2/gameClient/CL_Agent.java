@@ -3,6 +3,7 @@
 import api.*;
 import gameClient.util.Point3D;
 import org.json.JSONObject;
+import java.util.*;
 
 public class CL_Agent implements Runnable {
 		public static final double EPS = 0.0001;
@@ -180,7 +181,16 @@ public class CL_Agent implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public void run()
+	{
+		ArrayList<node_data> path=null;
+		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS)graph);
+		ag.init(ag.copy());
+		while (gameService.isRunning())
+		{
+
+		}
+
 
 	}
 }

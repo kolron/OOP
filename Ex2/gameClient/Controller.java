@@ -35,8 +35,8 @@ public class Controller implements Runnable
                 CL_Agent newAgent = new CL_Agent(graph, i);
                 newAgent.setController(this);
                 agents.add(newAgent);
-                if (gameServer.getInt("Nodes")<i) {
-                    currGame.addAgent(i);
+                if (gameServer.getInt("Nodes")<i) { //this if is just to make sure, if there's a scenario
+                    currGame.addAgent(i);   //where there are more agents than nodes, we won't run into an error
                 }
                 else
                 {

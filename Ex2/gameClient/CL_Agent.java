@@ -10,6 +10,7 @@ public class CL_Agent implements Runnable {
 		private static int _count = 0;
 		private static int _seed = 3331;
 		private int id;
+		private NodeData dest;
 	//	private long _key;
 		private geo_location pos;
 		private double speed;
@@ -17,19 +18,22 @@ public class CL_Agent implements Runnable {
 		private node_data currNode;
 		private directed_weighted_graph graph;
 		private CL_Pokemon currFruit;
+		private ArrayList<CL_Pokemon> nextPokemon;
 		private long sgDt;
 		private Controller controller;  //TODO maybe remove controller from agent
 		private double value;
 		private game_service gameService;
 
 
-		public CL_Agent(directed_weighted_graph g, int start_node) {
+
+	public CL_Agent(directed_weighted_graph g, int start_node) {
 			graph = g;
 			setMoney(0);
 			this.currNode = graph.getNode(start_node);
 			pos = currNode.getLocation();
 			id = -1;
 			setSpeed(0);
+			nextPokemon = new ArrayList<>();
 		}
 		public void update(String json) {
 			JSONObject line;
@@ -59,9 +63,9 @@ public class CL_Agent implements Runnable {
 			}
 		}
 
-		public void setController(Controller commander)
+		public void setController(Controller controller)
 		{
-		this.controller = commander;
+		this.controller = controller;
 		}
 
 		//@Override
@@ -138,16 +142,15 @@ public class CL_Agent implements Runnable {
 		public double getSpeed() {
 			return this.speed;
 		}
-
 		public void setSpeed(double v) {
 			this.speed = v;
 		}
-		public CL_Pokemon getCurrFruit() {
-			return currFruit;
-		}
+
+		public CL_Pokemon getCurrFruit() { return currFruit; }
 		public void setCurrFruit(CL_Pokemon curr_fruit) {
 			this.currFruit = curr_fruit;
 		}
+
 		public void set_SDT(long ddtt) {
 			long ddt = ddtt;
 			if(this.currEdge !=null) {
@@ -180,15 +183,55 @@ public class CL_Agent implements Runnable {
 		this.gameService = gameService;
 	}
 
+	public void setNextPokemon(String pokemons)
+	{
+		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS)graph);
+		ag.init(ag.copy());
+		ArrayList<CL_Pokemon> pokemonArray = Arena.json2Pokemons(pokemons);
+		for (CL_Pokemon pokemon: pokemonArray)
+		{
+			Arena.updateEdge(pokemon, graph);
+			pokemon.setMin_dist(ag.shortestPathDist(this.currNode.getKey(), pokemon.get_edge().getDest()));
+		}
+		pokemonArray.sort(new Comparator<>()
+		{
+			@Override
+			public int compare(CL_Pokemon p1, CL_Pokemon p2)
+			{
+				return Double.compare(p1.getMin_dist(),p2.getMin_dist());
+			}
+		});
+		for (CL_Pokemon pokemon: pokemonArray)
+		{
+		nextPokemon.add(pokemon);
+		}
+
+	}
+
 	@Override
 	public void run()
 	{
-		ArrayList<node_data> path=null;
 		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS)graph);
 		ag.init(ag.copy());
+		List<node_data> path=null;
 		while (gameService.isRunning())
 		{
-
+			if(path == null) {
+			}
+			setNextPokemon(gameService.getPokemons());
+			CL_Pokemon nextPok = nextPokemon.remove(0);
+			path = ag.shortestPath(this.getSrcNode(),nextPok.get_edge().getSrc());
+			path.add(graph.getNode(nextPok.get_edge().getDest()));
+			if (path != null)
+			{
+				path.remove(0);
+			}
+			else if(path != null)
+			{
+				node_data nextNode = path.get(0);
+				path.remove(0);
+				gameService.chooseNextEdge(id,nextNode.getKey());
+			}
 		}
 
 

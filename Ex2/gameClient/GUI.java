@@ -1,10 +1,8 @@
 package gameClient;
 
-import Server.Game_Server_Ex2;
 import api.DW_GraphDS;
 import api.game_service;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import gameClient.util.Panel;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,8 +16,12 @@ public class GUI extends JFrame implements Runnable
 {
     private Panel panel;
     private DW_GraphDS graph;
+    private String jsonGraph;
     private ArrayList<CL_Agent> agents;
     private ArrayList<CL_Pokemon> pokemons;
+    private String jsonPokemons;
+    private game_service game;
+
 
     public GUI()
     {
@@ -31,11 +33,67 @@ public class GUI extends JFrame implements Runnable
         add(panel);
     }
 
+    public game_service getGame() {
+        return game;
+    }
+
+    public void setGame(game_service game) {
+        this.game = game;
+    }
+
     public void run()
     {
         setVisible(true);
         repaint();
+
+//        setVisible(true);
+//        while (isVisible()) // while the screen is visible wait
+//        {
+//            try {
+//                Thread.sleep(20);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
+
+
+    public void update(String jsonGraph, String jsonPokemon, ArrayList<CL_Agent> agents, long time){
+        if (agents != null){
+            this.agents = agents;
+        }
+        if (jsonGraph != null){
+            if (!jsonGraph.equals(this.jsonGraph)){
+                this.jsonGraph = jsonGraph;
+                Gson gson = new Gson();
+                DW_GraphDS.WrapedDW_GraphDS wrapedGraph = gson.fromJson(game.getGraph(), DW_GraphDS.WrapedDW_GraphDS.class);
+                this.graph = new DW_GraphDS(wrapedGraph);
+//                this.graph = new DW_GraphDS((DW_GraphDS.WrapedDW_GraphDS) wrapedGraph);
+            }
+        }
+//        if (jsonPokemon != null){
+//            this.pokemons = jsonPokemon;
+//        }
+        if (jsonPokemon != null){
+            if (jsonPokemon != this.jsonPokemons){
+                ArrayList<CL_Pokemon> temp = new ArrayList<>(); // create a pokemon array
+                try {
+                    JSONArray jsonPokemonsArray = (JSONArray) (new JSONObject(jsonPokemon)).get("Pokemons"); // create a JSON array
+                    for (int i =0;i<jsonPokemonsArray.length();i++){ //loop through
+                        temp.add(CL_Pokemon.init_from_json(jsonPokemonsArray.get(i).toString()));  // create  a pokemon and add it to the array list
+                    }
+                    pokemons =  temp;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                this.jsonPokemons = jsonPokemon; // update string
+            }
+        }
+        this.panel.update(this.graph,this.agents,this.pokemons,time); // call update panel and update the panel
+    }
+}
+
+//TODO it is a test for the gui class
 
 //    public static void main(String[] args)
 //    {
@@ -68,7 +126,10 @@ public class GUI extends JFrame implements Runnable
 //        }
 //        gui.panel.update(gui.graph,gui.agents,gui.pokemons);
 //        gui.setVisible(true);
+//        gui.setResizable(true);
+//        Dimension screanSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////        gui.setBounds(20, 20, (int) (gui.panel.getXr() * screanSize.getWidth()), (int)screanSize.getHeight());
 //        gui.repaint();
 //        gui.panel.update(gui.graph,gui.agents,gui.pokemons);
 //    }
-}

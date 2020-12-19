@@ -18,6 +18,7 @@ public class Panel extends JPanel {
     private ArrayList<CL_Pokemon> pokemons;
     private Range xr;
     private Range yr;
+
     private long time;
 
     public Panel ()
@@ -73,11 +74,12 @@ public class Panel extends JPanel {
         }
     }
 
-    public void update(DW_GraphDS graph, ArrayList<CL_Agent> agents, ArrayList<CL_Pokemon> pokemons)
+    public void update(DW_GraphDS graph, ArrayList<CL_Agent> agents, ArrayList<CL_Pokemon> pokemons, long time)
     {
         setGraph(graph);
         setAgents(agents);
         setPokemons(pokemons);
+        setTime(time);
         repaint();
     }
 
@@ -104,6 +106,8 @@ public class Panel extends JPanel {
     public void setPokemons(ArrayList<CL_Pokemon> pokemons) {
         this.pokemons = pokemons;
     }
+
+    public void setTime(long time) { this.time = time; }
 
     public Range getXr() {
         return xr;

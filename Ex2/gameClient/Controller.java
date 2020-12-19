@@ -12,17 +12,19 @@ import java.util.ArrayList;
 
 public class Controller implements Runnable
 {
+
     private ArrayList<CL_Agent> agents;
     private ArrayList<Thread> agentsThreads;
+
     private ArrayList<CL_Pokemon> pokemons;
     private DW_GraphDS graph;
-    private game_service currGame;
+    private game_service game;
 
 
     public Controller(game_service game)
     {
         Gson gson = new Gson();
-        this.currGame = game;
+        this.game = game;
         this.graph = new DW_GraphDS(gson.fromJson(game.getGraph(), DW_GraphDS.WrapedDW_GraphDS.class));
         this.agents = new ArrayList<>();
         this.agentsThreads = new ArrayList<>();
@@ -36,11 +38,11 @@ public class Controller implements Runnable
                 newAgent.setController(this);
                 agents.add(newAgent);
                 if (gameServer.getInt("Nodes")<i) { //this if is just to make sure, if there's a scenario
-                    currGame.addAgent(i);   //where there are more agents than nodes, we won't run into an error
+                    this.game.addAgent(i);   //where there are more agents than nodes, we won't run into an error
                 }
                 else
                 {
-                    currGame.addAgent(0);
+                    this.game.addAgent(0);
                 }
             }
         } catch (JSONException e) {
@@ -54,6 +56,9 @@ public class Controller implements Runnable
         }
     }
 
+    public ArrayList<CL_Agent> getAgents() { return agents; }
+    public ArrayList<CL_Pokemon> getPokemons() { return pokemons; }
+
     @Override
     public void run() {
 
@@ -63,9 +68,9 @@ public class Controller implements Runnable
         Thread moveThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (currGame.isRunning())
+                while (game.isRunning())
                 {
-                    currGame.move();
+                    game.move();
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -75,10 +80,10 @@ public class Controller implements Runnable
             }
         });
         moveThread.start();
-        while(currGame.isRunning()) {
-            currGame.move();
+        while(game.isRunning()) {
+            game.move();
             try {
-                JSONObject agentObj = new JSONObject(currGame.getAgents());   //TODO check getAgents function and why she return something weird
+                JSONObject agentObj = new JSONObject(game.getAgents());   //TODO check getAgents function and why she return something weird
                 JSONArray agentArr = agentObj.getJSONArray("Agents");
                 for (int i = 0; i < agentArr.length(); i++) {
                     agents.get(i).update(agentArr.get(i).toString());
@@ -98,12 +103,12 @@ public class Controller implements Runnable
             e.printStackTrace();
         }
         for (Thread t : agentsThreads) { // join all threads
-                try {
-                    t.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
     }
 }
 

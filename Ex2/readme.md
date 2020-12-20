@@ -1,8 +1,15 @@
 # Ex1:
 ## **On the Project**
- This project is an implementation of an unidirectional weighted graph, a continuation of https://github.com/kolron/OOP/tree/main/Ex0 - the first project on the subject of graphs.  
- Improved style, and code from previous project - reduced the amount methods and helper methods to make for a more understandable, simpler code.
+ This project is of an autonomous "game" that does the following:
+ given a scenario(henceforth, scenario will refer to a graph, 'pokemons' and agents), create and draw the graph, agents and 'pokemons'.
+ Each agent will try to eat (by reaching) the pokemon that is placed on an edge in the graph.
+ As agents eat and reach a certain threshold, their speed increases. 
+ The the directive of the game is to earn a higher score by eating a maximum amount of 'pokemons' and calling the move function as little times as possible in the given time    limit.is  
+ 
+ The first part of the project (api directory) is an implementation of a directional weighted graph, a continuation of pevious projects in the repository.
+ The second part of the project (gameClient) is the implementation of the game.
 ***
+
 ## **On The Classes**
  **WGraph_DS**  
  This class implements the weighted_graph interface, and holds an inner class: **NodeInfo** that implements the node_info interface.  

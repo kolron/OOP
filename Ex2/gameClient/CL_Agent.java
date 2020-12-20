@@ -214,6 +214,7 @@ public class CL_Agent implements Runnable {
 		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS)graph);
 		ag.init(ag.copy());
 		List<node_data> path=null;
+		System.out.printf("Agent %d created!\n", this.getID());
 		while (gameService.isRunning())
 		{
 			if(path == null) {

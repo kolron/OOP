@@ -52,6 +52,7 @@ public class Ex2 {
                     while (game.isRunning()) {
                         try {
                             game.move();
+                            System.out.println("Move made");
                             Thread.sleep(950);
                         } catch (InterruptedException e) {
                             e.printStackTrace();

@@ -25,8 +25,9 @@ public class CL_Pokemon implements Comparator {
 	public static CL_Pokemon init_from_json(String json) {
 		CL_Pokemon ans = null;
 		try {
-			JSONObject p = new JSONObject(json);
-			int id = p.getInt("id");
+			JSONObject p = (JSONObject) new JSONObject(json).get("Pokemon");
+			String arr [] = p.getString("pos").split(",");
+			ans = new CL_Pokemon(new Point3D(Double.parseDouble(arr[0]),Double.parseDouble(arr[1]),Double.parseDouble(arr[2])),p.getInt("type"),p.getDouble("value"),0,null);
 
 		}
 		catch(Exception e) {

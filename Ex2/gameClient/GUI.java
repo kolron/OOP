@@ -3,7 +3,6 @@ package gameClient;
 import api.DW_GraphDS;
 import api.game_service;
 import com.google.gson.Gson;
-import gameClient.util.Panel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,9 +77,9 @@ public class GUI extends JFrame implements Runnable
             if (jsonPokemon != this.jsonPokemons){
                 ArrayList<CL_Pokemon> temp = new ArrayList<>(); // create a pokemon array
                 try {
-                    JSONArray jsonPokemonsArray = (JSONArray) (new JSONObject(jsonPokemon)).get("Pokemons"); // create a JSON array
+                    JSONArray jsonPokemonsArray = (JSONArray) (new JSONObject(jsonPokemon)).get("Pokemons");
                     for (int i =0;i<jsonPokemonsArray.length();i++){ //loop through
-                        temp.add(CL_Pokemon.init_from_json(jsonPokemonsArray.get(i).toString()));  // create  a pokemon and add it to the array list
+                        temp.add(CL_Pokemon.init_from_json(jsonPokemonsArray.get(i).toString()));
                     }
                     pokemons =  temp;
                 } catch (JSONException e) {

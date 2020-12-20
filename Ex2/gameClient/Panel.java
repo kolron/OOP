@@ -1,4 +1,4 @@
-package gameClient.util;
+package gameClient;
 
 import api.DW_GraphDS;
 import api.edge_data;
@@ -7,6 +7,9 @@ import api.node_data;
 import gameClient.Arena;
 import gameClient.CL_Agent;
 import gameClient.CL_Pokemon;
+import gameClient.util.Range;
+import gameClient.util.Range2D;
+import gameClient.util.Range2Range;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +19,7 @@ public class Panel extends JPanel {
     private DW_GraphDS graph;
     private ArrayList<CL_Agent> agents;
     private ArrayList<CL_Pokemon> pokemons;
+    private Dimension d;
     private Range xr;
     private Range yr;
 
@@ -24,7 +28,7 @@ public class Panel extends JPanel {
     public Panel ()
     {
         super();
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        d = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(0,0,d.width/2,d.height/2);
         setBackground(Color.white);
         xr = new Range(20,this.getWidth()-20);

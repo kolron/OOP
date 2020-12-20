@@ -1,4 +1,4 @@
-# Ex1:
+# Ex2:
 ## **On the Project**
  This project is of an autonomous "game" that does the following:
  given a scenario(henceforth, scenario will refer to a graph, 'pokemons' and agents), create and draw the graph, agents and 'pokemons'.

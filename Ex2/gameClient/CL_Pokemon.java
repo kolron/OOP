@@ -55,7 +55,7 @@ public class CL_Pokemon implements Comparator {
 		return min_dist;
 	}
 
-	public void setMin_dist(double mid_dist) {
+	public void setMinDist(double mid_dist) {
 		this.min_dist = mid_dist;
 	}
 

@@ -63,7 +63,7 @@ public class GUI extends JFrame implements Runnable
             }
         }
         if (jsonPokemon != null){
-            if (jsonPokemon != this.jsonPokemons){
+            if (!jsonPokemon.equals(this.jsonPokemons)){
                 ArrayList<CL_Pokemon> temp = new ArrayList<>(); // create a pokemon array
                 try {
                     JSONArray jsonPokemonsArray = (JSONArray) (new JSONObject(jsonPokemon)).get("Pokemons");
@@ -77,7 +77,6 @@ public class GUI extends JFrame implements Runnable
                 this.jsonPokemons = jsonPokemon; // update string
             }
         }
-
         this.panel.update(this.graph,this.agents,this.pokemons,time); // call update panel and update the panel
     }
 }

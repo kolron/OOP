@@ -176,7 +176,7 @@ public class CL_Agent implements Runnable {
 		ArrayList<CL_Pokemon> pokemonArray = Arena.json2Pokemons(pokemons);
 		for (CL_Pokemon pokemon : pokemonArray) {
 			Arena.updateEdge(pokemon, graph);
-			pokemon.setMin_dist(ag.shortestPathDist(this.currNode.getKey(), pokemon.get_edge().getDest()));
+			pokemon.setMinDist(ag.shortestPathDist(this.currNode.getKey(), pokemon.get_edge().getDest()));
 		}
 		pokemonArray.sort(new Comparator<>() {
 			@Override
@@ -199,26 +199,32 @@ public class CL_Agent implements Runnable {
 		{
 			if (path == null || path.size() == 0)
 			{
-			while (dest != -1) {
+				while (dest != -1) {
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					setNextPokemon(gameService .getPokemons()); // updating the array with the best Pokemon's to get
+				} catch(Exception e){
+					System.out.println("happened");
 				}
-			}
 
-				if (nextPokemon.size() == 0)
+				if (nextPokemon.size() != 0)
 				{
-				}
-				else {
-					setNextPokemon(gameService.getPokemons());
 					CL_Pokemon nextPok = nextPokemon.remove(0);
+					setCurrFruit(nextPok);
 					path = ag.shortestPath(this.getSrcNode(), nextPok.get_edge().getSrc());
+					if (path != null){
+						path.remove(0);
+					}
 					path.add(graph.getNode(nextPok.get_edge().getDest()));
 				}
 			}
 
-			if (path != null &&currFruit!=null )
+			if (path != null && currFruit != null)
 			{
 				while (dest != -1) // while agent is traveling on the edge
 				{
@@ -229,14 +235,13 @@ public class CL_Agent implements Runnable {
 					}
 
 				}
-				if (path.size() <= 1)
+				if (path.size() >= 1)
 				{
 					node_data nextNode = path.get(0);
 					path.remove(0);
 					gameService.chooseNextEdge(id, nextNode.getKey());
 				}
-					}
-				}
 			}
-
 		}
+	}
+}

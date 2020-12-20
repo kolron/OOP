@@ -4,9 +4,6 @@ import api.DW_GraphDS;
 import api.edge_data;
 import api.geo_location;
 import api.node_data;
-import gameClient.Arena;
-import gameClient.CL_Agent;
-import gameClient.CL_Pokemon;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
 import gameClient.util.Range2Range;
@@ -38,7 +35,12 @@ public class Panel extends JPanel {
     @Override
     public void paint(Graphics g)
     {
-        g.drawString("Time:" + this.time, 30,30);
+        g.drawString("Time left: " + (int)(this.time/1000), 30,30);
+        int score = 0;
+        for (CL_Agent agent : this.agents) {
+            score += agent.getValue();
+        }
+        g.drawString("Score: " + score, 30, 50);
         // paint Nodes
         if(graph!=null)
         {

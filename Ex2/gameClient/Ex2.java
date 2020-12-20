@@ -31,30 +31,31 @@ public class Ex2 {
                 e.printStackTrace();
             }
         }
-
         else {
             obj.cred = obj.new Credentials(args[0], Integer.parseInt(args[1]));
             obj.gui = new GUI();
             obj.guiThread = new Thread(obj.gui);
         }
-            game_service game = Game_Server_Ex2.getServer(obj.cred.level);
-            obj.controller = new Controller(game);
-            obj.gui.setGame(game);
-            obj.gui.setTitle(game.toString());
-            obj.game = game;
-            game.startGame();
-            obj.controllerThread = new Thread(obj.controller);
-            obj.controllerThread.start();
-            obj.guiThread.start();
-            while (game.isRunning()) {
-                obj.gui.update(game.getGraph(), game.getPokemons(), obj.controller.getAgents(), obj.game.timeToEnd());
-                obj.gui.repaint();
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        game_service game = Game_Server_Ex2.getServer(obj.cred.level);
+        obj.controller = new Controller(game);
+        obj.gui.setGame(game);
+        obj.gui.setTitle(game.toString());
+        obj.game = game;
+        game.startGame();
+        obj.controllerThread = new Thread(obj.controller);
+        obj.controllerThread.start();
+        obj.guiThread.start();
+        obj.gui.setTitle("Ex2");
+        obj.gui.setResizable(true);
+        while (game.isRunning()) {
+            obj.gui.update(game.getGraph(), game.getPokemons(), obj.controller.getAgents(), obj.game.timeToEnd());
+            obj.gui.repaint();
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
         //TODO check this
         try { // joining threads since program ended
 
@@ -63,7 +64,7 @@ public class Ex2 {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        }
+    }
 
     public class Credentials
     {

@@ -1,7 +1,6 @@
-README EX0
+## EX0
 This project is an implmentation of an undirectional unwieghted graph.
-/////////////////////////////////////////////////////////////////////////////////
-
+***
 class: NodeDate
 
  GENERAL:
@@ -29,7 +28,7 @@ class: NodeDate
    and disconnect it from all of its neighbors and disconnect all of its neighbors from him.
    
 
-/////////////////////////////////////////////////////////////////////////////////
+***
 
 class: Graph_DS
  GENERAL:
@@ -66,7 +65,7 @@ class: Graph_DS
   for every node in the graph, adds him to the string, then his neighbors.
   once a node's neighbors have been finished, new line.
  	
-/////////////////////////////////////////////////////////////////////////////////
+***
 
 class : Graph_Algo
  GENERAL:

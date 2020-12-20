@@ -30,8 +30,8 @@ public class Ex2 {
             {
                 e.printStackTrace();
             }
-
         }
+
         else {
             obj.cred = obj.new Credentials(args[0], Integer.parseInt(args[1]));
             obj.gui = new GUI();
@@ -46,22 +46,6 @@ public class Ex2 {
             obj.controllerThread = new Thread(obj.controller);
             obj.controllerThread.start();
             obj.guiThread.start();
-            Thread moveThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (game.isRunning()) {
-                        try {
-                            game.move();
-                            System.out.println("Move made");
-                            Thread.sleep(950);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-            moveThread.start();
-
             while (game.isRunning()) {
                 obj.gui.update(game.getGraph(), game.getPokemons(), obj.controller.getAgents(), obj.game.timeToEnd());
                 obj.gui.repaint();
@@ -70,16 +54,15 @@ public class Ex2 {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                //TODO check this
-                try { // joining threads since program ended
-                    moveThread.join();
-                    obj.guiThread.join(); // join gui thread
-                    obj.controllerThread.join(); // join controller thread
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
+        //TODO check this
+        try { // joining threads since program ended
+
+            obj.guiThread.join(); // join gui thread
+            obj.controllerThread.join(); // join controller thread
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         }
 
     public class Credentials

@@ -10,7 +10,7 @@ public class CL_Agent implements Runnable {
 		private static int _count = 0;
 		private static int _seed = 3331;
 		private int id;
-		private NodeData dest;
+		private int dest;
 	//	private long _key;
 		private geo_location pos;
 		private double speed;
@@ -54,7 +54,7 @@ public class CL_Agent implements Runnable {
 					this.pos = position3D;
 					this.setCurrNode(src);
 					this.setSpeed(speed);
-					this.setNextNode(dest);
+					this.dest = dest;
 					this.setMoney(value);
 				}
 			}
@@ -217,25 +217,29 @@ public class CL_Agent implements Runnable {
 		System.out.printf("Agent %d created!\n", this.getID());
 		while (gameService.isRunning())
 		{
-			if(path == null) {
-			}
-			setNextPokemon(gameService.getPokemons());
-			CL_Pokemon nextPok = nextPokemon.remove(0);
-			path = ag.shortestPath(this.getSrcNode(),nextPok.get_edge().getSrc());
-			path.add(graph.getNode(nextPok.get_edge().getDest()));
-			if (path != null)
+
+
+			if(path == null || path.size() == 0)
 			{
-				path.remove(0);
+				setNextPokemon(gameService.getPokemons());
+				CL_Pokemon nextPok = nextPokemon.remove(0);
+				path = ag.shortestPath(this.getSrcNode(), nextPok.get_edge().getSrc());
+				path.add(graph.getNode(nextPok.get_edge().getDest()));
 			}
-			else if(path != null)
+		while(dest != -1) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+			 if(path != null)
 			{
 				node_data nextNode = path.get(0);
 				path.remove(0);
 				gameService.chooseNextEdge(id,nextNode.getKey());
 			}
 		}
-
-
 	}
 }
 

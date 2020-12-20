@@ -33,16 +33,17 @@ public class Controller implements Runnable
         {
             JSONObject gameServer = new JSONObject(new JSONObject(game.toString()).get("GameServer").toString());
             int numberOfAgents  = gameServer.getInt("agents");
+            CL_Agent[] arr = new CL_Agent[numberOfAgents];
             for (int i = 0; i < numberOfAgents; i++) {
                 CL_Agent newAgent = new CL_Agent(graph, i);
                 newAgent.setController(this);
                 newAgent.setGameService(this.game);
                 agents.add(newAgent);
-                if (graph.nodeSize() < i) { //this if is just to make sure, if there's a scenario
-                    this.game.addAgent(i);   //where there are more agents than nodes, we won't run into an error
+                if (i  < graph.nodeSize()){ //this if is just to make sure, if there's a scenario
+                    this.game.addAgent(i);//where there are more agents than nodes, we won't run into an error
                 }
-                else
-                {
+               else
+               {
                     this.game.addAgent(0);
                 }
             }
@@ -62,7 +63,6 @@ public class Controller implements Runnable
 
     @Override
     public void run() {
-
         for (Thread t: agentsThreads) { // starts all agents
             t.start();
         }
@@ -82,7 +82,6 @@ public class Controller implements Runnable
         });
         moveThread.start();
         while(game.isRunning()) {
-            game.move();
             try {
                 JSONObject agentObj = new JSONObject(game.getAgents());   //TODO check getAgents function and why she return something weird
                 JSONArray agentArr = agentObj.getJSONArray("Agents");

@@ -30,6 +30,8 @@ public class GUI extends JFrame implements Runnable
         setBounds(0,0,(int)d.getWidth()/2,(int)d.getHeight()/2);
         panel = new Panel();
         add(panel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     public game_service getGame() {
@@ -45,17 +47,7 @@ public class GUI extends JFrame implements Runnable
         setVisible(true);
         repaint();
 
-//        setVisible(true);
-//        while (isVisible()) // while the screen is visible wait
-//        {
-//            try {
-//                Thread.sleep(20);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
-
 
     public void update(String jsonGraph, String jsonPokemon, ArrayList<CL_Agent> agents, long time){
         if (agents != null){
@@ -67,12 +59,9 @@ public class GUI extends JFrame implements Runnable
                 Gson gson = new Gson();
                 DW_GraphDS.WrapedDW_GraphDS wrapedGraph = gson.fromJson(game.getGraph(), DW_GraphDS.WrapedDW_GraphDS.class);
                 this.graph = new DW_GraphDS(wrapedGraph);
-//                this.graph = new DW_GraphDS((DW_GraphDS.WrapedDW_GraphDS) wrapedGraph);
+
             }
         }
-//        if (jsonPokemon != null){
-//            this.pokemons = jsonPokemon;
-//        }
         if (jsonPokemon != null){
             if (jsonPokemon != this.jsonPokemons){
                 ArrayList<CL_Pokemon> temp = new ArrayList<>(); // create a pokemon array
@@ -88,6 +77,7 @@ public class GUI extends JFrame implements Runnable
                 this.jsonPokemons = jsonPokemon; // update string
             }
         }
+
         this.panel.update(this.graph,this.agents,this.pokemons,time); // call update panel and update the panel
     }
 }

@@ -37,16 +37,21 @@ public class Ex2 {
             obj.guiThread = new Thread(obj.gui);
         }
         game_service game = Game_Server_Ex2.getServer(obj.cred.level);
+        boolean t = game.login(Long.parseLong(obj.cred.id));
+        if (t == true)
+        {
+            System.out.println("Logged in to level: " + obj.cred.level);
+        }
         obj.controller = new Controller(game);
         obj.gui.setGame(game);
         obj.gui.setTitle(game.toString());
         obj.game = game;
-        game.startGame();
         obj.controllerThread = new Thread(obj.controller);
         obj.controllerThread.start();
         obj.guiThread.start();
-        obj.gui.setTitle("Ex2");
+        obj.gui.setTitle("Ex2 level" + "" + obj.cred.level);
         obj.gui.setResizable(true);
+        game.startGame();
         while (game.isRunning()) {
             obj.gui.update(game.getGraph(), game.getPokemons(), obj.controller.getAgents(), obj.game.timeToEnd());
             obj.gui.repaint();

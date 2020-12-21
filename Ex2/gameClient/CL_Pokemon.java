@@ -51,7 +51,7 @@ public class CL_Pokemon implements Comparator {
 //	public double getSpeed() {return _speed;}
 	public double getValue() {return _value;}
 
-	public double getMin_dist() {
+	public double getMinDist() {
 		return min_dist;
 	}
 
@@ -71,6 +71,6 @@ public class CL_Pokemon implements Comparator {
 	public int compare(Object o1, Object o2) {
 		CL_Pokemon p1 = (CL_Pokemon) o1;
 		CL_Pokemon p2 = (CL_Pokemon) o2;
-		return Double.compare(p1.getMin_dist(),p2.getMin_dist());
+		return Double.compare(p1.getMinDist(),p2.getMinDist());
 	}
 }

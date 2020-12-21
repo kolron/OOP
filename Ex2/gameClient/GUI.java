@@ -3,12 +3,15 @@ package gameClient;
 import api.DW_GraphDS;
 import api.game_service;
 import com.google.gson.Gson;
+import gameClient.util.Range;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
 public class GUI extends JFrame implements Runnable
@@ -27,10 +30,20 @@ public class GUI extends JFrame implements Runnable
         super();
         setLayout(null);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(0,0,(int)d.getWidth()/2,(int)d.getHeight()/2);
+        setBounds(30,30,(int)d.getWidth()/2 - 30,(int)d.getHeight()/2 - 30);
         panel = new Panel();
         add(panel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                panel.setXr(new Range(50,panel.getWidth()-50));
+                panel.setYr(new Range(50,panel.getHeight()-50));
+                panel.setBounds(30, 30, getWidth() - 30, getHeight() - 30);
+                panel.repaint();
+            }
+        });
 
     }
 

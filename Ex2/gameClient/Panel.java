@@ -30,17 +30,14 @@ public class Panel extends JPanel {
         setBackground(Color.white);
         xr = new Range(20,this.getWidth()-20);
         yr = new Range(20,this.getHeight()-20);
+
     }
 
     @Override
     public void paint(Graphics g)
     {
-        g.drawString("Time left: " + (int)(this.time/1000), 30,30);
-        int score = 0;
-        for (CL_Agent agent : this.agents) {
-            score += agent.getValue();
-        }
-        g.drawString("Score: " + score, 30, 50);
+        g.drawString("Time left: " + (int)(this.time/1000), 0,10);
+
         // paint Nodes
         if(graph!=null)
         {
@@ -50,6 +47,7 @@ public class Panel extends JPanel {
                 geo_location nodeLocation =  t.world2frame(node.getLocation());
                 g.setColor(Color.BLACK);
                 g.fillOval((int) nodeLocation.x()-5, (int)nodeLocation.y()-5, 10,10);
+                g.drawString("" + node.getKey(), (int)nodeLocation.x()-5, (int)nodeLocation.y()-10);
                 for(edge_data edge :graph.getE(node.getKey())) // paint lines
                 {
                     node_data destNode = graph.getNode(edge.getDest());
@@ -60,11 +58,23 @@ public class Panel extends JPanel {
             }
 
             g.setColor(Color.RED);
+            int score = 0;
             for (CL_Agent agent:agents)
             {
                 geo_location agentLocation = t.world2frame(agent.getLocation());
                 g.fillOval((int)agentLocation.x()-8,(int)agentLocation.y()-8,15,15);
+                g.drawString("" + agent.getID(), (int)agentLocation.x()-5,(int)agentLocation.y()-10);
+                score += agent.getValue();
             }
+            g.setColor(Color.black);
+            g.drawString("Score: " + score, 0, 30);
+            int yTextPos = 60;
+            for (int i = 0; i < agents.size(); i++) {
+                CL_Agent currAgent = agents.get(i);
+                g.drawString("agent " + currAgent.getID() + ":" + (int)currAgent.getValue(), 0, yTextPos);
+                yTextPos += 20;
+            }
+
             // pokemons
             for (CL_Pokemon pokemon:pokemons)
             {
@@ -76,6 +86,7 @@ public class Panel extends JPanel {
                 }
                 geo_location pokemonLocation = t.world2frame(pokemon.getLocation());
                 g.fillOval((int)pokemonLocation.x()-8,(int)pokemonLocation.y()-8,15,15);
+                g.drawString("" + (int) pokemon.getValue(), (int)pokemonLocation.x()-5,(int)pokemonLocation.y()-10);
             }
         }
     }

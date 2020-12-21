@@ -181,7 +181,7 @@ public class CL_Agent implements Runnable {
 		pokemonArray.sort(new Comparator<>() {
 			@Override
 			public int compare(CL_Pokemon p1, CL_Pokemon p2) {
-				return Double.compare(p1.getMin_dist(), p2.getMin_dist());
+				return Double.compare(p2.getValue()/p2.getMinDist(), p1.getValue()/p1.getMinDist());
 			}
 		});
 		for (CL_Pokemon pokemon : pokemonArray) {
@@ -196,7 +196,7 @@ public class CL_Agent implements Runnable {
 		List<node_data> path = null;
 		System.out.printf("Agent %d created!\n", this.getID());
 		while (gameService.isRunning()) {
-			if (path == null || path.size() == 0) {
+			if (path == null || currFruit == null) {
 				while (dest != -1) {
 					try {
 						Thread.sleep(1);
@@ -204,32 +204,40 @@ public class CL_Agent implements Runnable {
 						e.printStackTrace();
 					}
 				}
-					setNextPokemon(gameService.getPokemons());
-					if (nextPokemon.size() != 0) {
-						CL_Pokemon nextPok = nextPokemon.remove(0);
-						setCurrFruit(nextPok);
-						path = ag.shortestPath(this.getSrcNode(), nextPok.get_edge().getSrc());
-						path.add(graph.getNode(nextPok.get_edge().getDest()));
-						if (path != null) {
-							path.remove(0);
-						}
+				setNextPokemon(gameService.getPokemons());
+				if (nextPokemon.size() != 0) {
+					CL_Pokemon nextPok = nextPokemon.remove(0);
+					setCurrFruit(nextPok);
+					path = ag.shortestPath(this.getSrcNode(), nextPok.get_edge().getSrc());
+					if (path != null && path.size() > 0) {
+						path.remove(0);
+					}
+					path.add(graph.getNode(nextPok.get_edge().getDest()));
+					for (node_data n : path) {
+						System.out.print(n.getKey() + " ,");
+					}
+					System.out.println();
+				}
+			}
+			if (path != null && currFruit != null) {
+				while (dest != -1)
+				{
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
-				if (path != null && currFruit != null) {
-					while (dest != -1)
-					{
-						try {
-							Thread.sleep(1);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-					if (path.size() >= 1) {
-						node_data nextNode = path.remove(0);
-						gameService.chooseNextEdge(id, nextNode.getKey());
-					}
+				if (path.size() >= 1) {
+					node_data nextNode = path.remove(0);
+					gameService.chooseNextEdge(id, nextNode.getKey());
+				}
+				else {
+					setCurrFruit(null);
+					path = null;
 				}
 			}
 		}
 	}
+}
 

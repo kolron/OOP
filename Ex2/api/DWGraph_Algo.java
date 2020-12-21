@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.*;
-import api.geo_location;
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph g;
@@ -128,7 +127,8 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             path.add(this.g.getNode(dest));  //add the node to the arrayList
             if (src == dest) {  //if the nodes are the same
                 return path;  //retrun the arrayList
-            } else {
+            }
+            else {
                 Dijkstra(src, dest);  //call the helping function dijkstra
                 if (!this.pred.containsKey(this.g.getNode(dest))) {  //if pred doesn't not contain the dest key
                     return null;  //return null

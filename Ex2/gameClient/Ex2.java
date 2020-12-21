@@ -37,23 +37,24 @@ public class Ex2 {
             obj.guiThread = new Thread(obj.gui);
         }
         game_service game = Game_Server_Ex2.getServer(obj.cred.level);
-//        boolean t = game.login(Long.parseLong(obj.cred.id));
-//        if (t == true)
-//        {
-//            System.out.println("Logged in to level: " + obj.cred.level);
-//        }
-        obj.controller = new Controller(game);
-        obj.gui.setGame(game);
-        obj.gui.setTitle(game.toString());
-        obj.game = game;
-        obj.controllerThread = new Thread(obj.controller);
-        obj.controllerThread.start();
-        obj.guiThread.start();
-        obj.gui.setTitle("Ex2 level" + "" + obj.cred.level);
+        boolean t = game.login(Long.parseLong(obj.cred.id));  //login for the server
+        if (t == true)
+        {
+            System.out.println("Logged in to level: " + obj.cred.level);
+        }
+        obj.controller = new Controller(game);  //creating controller
+        obj.gui.setGame(game);  //set the game in the gui class
+        obj.gui.setTitle(game.toString());  //set title
+        obj.game = game;  //set game
+        obj.controllerThread = new Thread(obj.controller);  //creating the controller thread
+        obj.controllerThread.start();  //start the controller thread
+        obj.guiThread.start();  //start the gui thread
+        obj.gui.setTitle("Ex2 level" + "" + obj.cred.level);  //set to proper title
         obj.gui.setResizable(true);
-        game.startGame();
-        while (game.isRunning()) {
-            obj.gui.update(game.getGraph(), game.getPokemons(), obj.controller.getAgents(), obj.game.timeToEnd());
+        game.startGame();  //start the game
+        while (game.isRunning()) {  //while the game is still running
+            //update and repaint
+            obj.gui.update(game.getGraph(), game.getPokemons(), obj.controller.getAgents(), obj.game.timeToEnd());  //update the game with the given data
             obj.gui.repaint();
             try {
                 Thread.sleep(20);
@@ -61,9 +62,8 @@ public class Ex2 {
                 e.printStackTrace();
             }
         }
-        //TODO check this
-        try { // joining threads since program ended
-
+        // joining threads because game ended
+        try {
             obj.guiThread.join(); // join gui thread
             obj.controllerThread.join(); // join controller thread
         } catch (InterruptedException e) {
@@ -71,6 +71,7 @@ public class Ex2 {
         }
     }
 
+    //inner class for the user input
     public class Credentials
     {
         private int level;

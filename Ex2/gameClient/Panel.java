@@ -19,7 +19,6 @@ public class Panel extends JPanel {
     private Dimension d;
     private Range xr;
     private Range yr;
-
     private long time;
 
     public Panel ()
@@ -36,6 +35,7 @@ public class Panel extends JPanel {
     @Override
     public void paint(Graphics g)
     {
+        //show how much time left
         g.drawString("Time left: " + (int)(this.time/1000), 0,10);
 
         // paint Nodes
@@ -57,6 +57,7 @@ public class Panel extends JPanel {
                 }
             }
 
+            //paint agents
             g.setColor(Color.RED);
             int score = 0;
             for (CL_Agent agent:agents)
@@ -66,16 +67,17 @@ public class Panel extends JPanel {
                 g.drawString("" + agent.getID(), (int)agentLocation.x()-5,(int)agentLocation.y()-10);
                 score += agent.getValue();
             }
+            //show score for each agent
             g.setColor(Color.black);
             g.drawString("Score: " + score, 0, 30);
             int yTextPos = 60;
             for (int i = 0; i < agents.size(); i++) {
                 CL_Agent currAgent = agents.get(i);
-                g.drawString("agent " + currAgent.getID() + ":" + (int)currAgent.getValue(), 0, yTextPos);
+                g.drawString("agent " + currAgent.getID() + " : " + (int)currAgent.getValue(), 0, yTextPos);
                 yTextPos += 20;
             }
 
-            // pokemons
+            // paint pokemons
             for (CL_Pokemon pokemon:pokemons)
             {
                 if(pokemon.getType()==-1) {
@@ -91,6 +93,7 @@ public class Panel extends JPanel {
         }
     }
 
+    //update panel function
     public void update(DW_GraphDS graph, ArrayList<CL_Agent> agents, ArrayList<CL_Pokemon> pokemons, long time)
     {
         setGraph(graph);

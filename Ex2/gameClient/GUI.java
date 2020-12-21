@@ -30,11 +30,12 @@ public class GUI extends JFrame implements Runnable
         super();
         setLayout(null);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(30,30,(int)d.getWidth()/2 - 30,(int)d.getHeight()/2 - 30);
+        setBounds(30,30,(int)d.getWidth()/2 - 30,(int)d.getHeight()/2 - 30);  //set default bounds
         panel = new Panel();
         add(panel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        //resize option
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -62,19 +63,22 @@ public class GUI extends JFrame implements Runnable
 
     }
 
+    //update function for the gui
     public void update(String jsonGraph, String jsonPokemon, ArrayList<CL_Agent> agents, long time){
+        //set agents
         if (agents != null){
             this.agents = agents;
         }
+        //set graph
         if (jsonGraph != null){
             if (!jsonGraph.equals(this.jsonGraph)){
                 this.jsonGraph = jsonGraph;
                 Gson gson = new Gson();
                 DW_GraphDS.WrapedDW_GraphDS wrapedGraph = gson.fromJson(game.getGraph(), DW_GraphDS.WrapedDW_GraphDS.class);
                 this.graph = new DW_GraphDS(wrapedGraph);
-
             }
         }
+        //set pokemon
         if (jsonPokemon != null){
             if (!jsonPokemon.equals(this.jsonPokemons)){
                 ArrayList<CL_Pokemon> temp = new ArrayList<>(); // create a pokemon array
@@ -90,6 +94,7 @@ public class GUI extends JFrame implements Runnable
                 this.jsonPokemons = jsonPokemon; // update string
             }
         }
+        //update the panel
         this.panel.update(this.graph,this.agents,this.pokemons,time); // call update panel and update the panel
     }
 }

@@ -61,6 +61,13 @@ public class Controller implements Runnable
     public ArrayList<CL_Agent> getAgents() { return agents; }
     public ArrayList<CL_Pokemon> getPokemons() { return pokemons; }
 
+    /**
+     * run function of the controller
+     * he starts every thread of the agents threads
+     * create new thread for move function and controlling the number of moves
+     * update each agent
+     * in the nd join all threads
+     */
     @Override
     public void run() {
         for (Thread t: agentsThreads) { // starts all agents

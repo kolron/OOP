@@ -181,6 +181,10 @@ public class CL_Agent implements Runnable {
 		this.gameService = gameService;
 	}
 
+	/**
+	 * this function gets a json string of pokemons and set the ext pokemon of this agent to the closest pokemon
+	 * @param pokemons
+	 */
 	public void setNextPokemon(String pokemons) {
 		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS) graph);
 		ag.init(ag.copy());
@@ -200,7 +204,13 @@ public class CL_Agent implements Runnable {
 		}
 	}
 
-	//agent's algo
+	/**
+	 * function for the agent run algorithm
+	 * this function runs while the game is still running.
+	 * if the agent's path or currFruit is null wait
+	 * else set the next pokemon and take the closest pokemon to him. update his path as well
+	 * set the next node of this agent to the first node in path
+	 */
 	@Override
 	public void run() {
 		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS) graph);

@@ -12,6 +12,14 @@ public class Ex2 {
     private game_service game;
     private LoginScreen login;
     private Thread loginThread;
+
+    /**
+     * main function. where we run and start the game
+     * this function take the level from the server by the user input and initiate all the variables.
+     * this function starts the gui and controller threads and start them with the game thread
+     * in the end we join all the threads
+     * @param args
+     */
     public static void main(String[] args) {
         Ex2 obj = new Ex2();
 

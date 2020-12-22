@@ -65,6 +65,12 @@ public class Point3D implements geo_location, Serializable{
         Point3D p2 = (Point3D)p;
         return ( (_x==p2._x) && (_y==p2._y) && (_z==p2._z) );
     }
+
+    /**
+     *
+     * @param p2
+     * @return boolean
+     */
     public boolean close2equals(geo_location p2) {
         return ( this.distance(p2) < EPS && p2 != null);
     }

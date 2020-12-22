@@ -8,6 +8,7 @@ import api.geo_location;
 import java.io.Serializable;
 
 public class Point3D implements geo_location, Serializable{
+
 	private static final long serialVersionUID = 1L;
 	/**
      * Simple set of constants - should be defined in a different class (say class Constants).*/
@@ -49,6 +50,9 @@ public class Point3D implements geo_location, Serializable{
     public String toString() { return _x+","+_y+","+_z; }
     @Override
     public double distance(geo_location p2) {
+        if (p2 == null){
+            return -1;
+        }
         double dx = this.x() - p2.x();
         double dy = this.y() - p2.y();
         double dz = this.z() - p2.z();
@@ -61,10 +65,18 @@ public class Point3D implements geo_location, Serializable{
         Point3D p2 = (Point3D)p;
         return ( (_x==p2._x) && (_y==p2._y) && (_z==p2._z) );
     }
+
+    /**
+     *
+     * @param p2
+     * @return boolean
+     */
     public boolean close2equals(geo_location p2) {
-        return ( this.distance(p2) < EPS ); }
-    public boolean equalsXY (Point3D p)
-    {return p._x == _x && p._y == _y;}
+        return ( this.distance(p2) < EPS && p2 != null);
+    }
+    public boolean equalsXY (Point3D p) {
+        return p._x == _x && p._y == _y;
+    }
 
      public String toString(boolean all) {
         if(all) return "[" + _x + "," +_y+","+_z+"]";

@@ -16,7 +16,9 @@ public class Range {
 	
 	public boolean isIn(double d) {
 		boolean inSide = false;
-		if(d>=this.get_min() && d<=this.get_max()) {inSide=true;}
+		if(d>=this.get_min() && d<=this.get_max()) {
+			inSide=true;
+		}
 		return inSide;
 	}
 	public String toString() {

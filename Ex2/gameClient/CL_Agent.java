@@ -27,12 +27,22 @@ public class CL_Agent implements Runnable {
 
 	public CL_Agent(directed_weighted_graph g, int start_node) {
 		graph = g;
-		setMoney(0);
 		this.currNode = graph.getNode(start_node);
 		pos = currNode.getLocation();
 		id = -1;
 		setSpeed(0);
+		setMoney(0);
 		nextPokemon = new ArrayList<>();
+	}
+
+	public CL_Agent(directed_weighted_graph g, int id,int srcNode, double value, double speed, geo_location pos)
+	{
+		this.graph = g;
+		this.id = id;
+		this.currNode = g.getNode(srcNode);
+		this.value = value;
+		this.speed = speed;
+		this.pos = pos;
 	}
 
 	public void update(String json) {
@@ -96,7 +106,8 @@ public class CL_Agent implements Runnable {
 		this.currEdge = graph.getEdge(src, dest);
 		if (currEdge != null) {
 			ans = true;
-		} else {
+		}
+		else {
 			currEdge = null;
 		}
 		return ans;
@@ -170,6 +181,10 @@ public class CL_Agent implements Runnable {
 		this.gameService = gameService;
 	}
 
+	/**
+	 * this function gets a json string of pokemons and set the ext pokemon of this agent to the closest pokemon
+	 * @param pokemons
+	 */
 	public void setNextPokemon(String pokemons) {
 		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS) graph);
 		ag.init(ag.copy());
@@ -189,7 +204,13 @@ public class CL_Agent implements Runnable {
 		}
 	}
 
-	//agent's algo
+	/**
+	 * function for the agent run algorithm
+	 * this function runs while the game is still running.
+	 * if the agent's path or currFruit is null wait
+	 * else set the next pokemon and take the closest pokemon to him. update his path as well
+	 * set the next node of this agent to the first node in path
+	 */
 	@Override
 	public void run() {
 		DWGraph_Algo ag = new DWGraph_Algo((DW_GraphDS) graph);

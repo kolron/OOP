@@ -27,12 +27,22 @@ public class CL_Agent implements Runnable {
 
 	public CL_Agent(directed_weighted_graph g, int start_node) {
 		graph = g;
-		setMoney(0);
 		this.currNode = graph.getNode(start_node);
 		pos = currNode.getLocation();
 		id = -1;
 		setSpeed(0);
+		setMoney(0);
 		nextPokemon = new ArrayList<>();
+	}
+
+	public CL_Agent(directed_weighted_graph g, int id,int srcNode, double value, double speed, geo_location pos)
+	{
+		this.graph = g;
+		this.id = id;
+		this.currNode = g.getNode(srcNode);
+		this.value = value;
+		this.speed = speed;
+		this.pos = pos;
 	}
 
 	public void update(String json) {
@@ -96,7 +106,8 @@ public class CL_Agent implements Runnable {
 		this.currEdge = graph.getEdge(src, dest);
 		if (currEdge != null) {
 			ans = true;
-		} else {
+		}
+		else {
 			currEdge = null;
 		}
 		return ans;

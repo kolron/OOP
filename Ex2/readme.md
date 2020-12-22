@@ -9,7 +9,7 @@
  The first part of the project (api directory) is an implementation of a directional weighted graph, a continuation of pevious projects in the repository.
  The second part of the project (gameClient) is the implementation of the game.
 ***
-
+## **Package api**
 ## **On The Classes**
  **WGraph_DS**  
  This class implements the directed_weighted_graph interface.  
@@ -42,7 +42,7 @@
     _2.void connect(edge_data e)_: connect via edge_data e. This method connects according to the src, dest, and weight values in the edge_data e.
      
     _3.node_data removeNode(int num)_: Removes the node with key num from the graph.  
-      
+       
     _4.void removeEdge(int src, int dest)_: Removes the edge originating from node with key src to node with key dest. 
     
    ***
@@ -72,4 +72,55 @@
     
     _5.boolean load(String name)_: This method load the graph from a file, written in JSON formatting, otherwise we won't be able to load. returns true if we managed to load the        graph
     
+ ***
+ 
+ **NodeData**
+  This class implements the node_data interface.
+  The class represents the nodes in our graph.
+  ***
+  **Representation of nodes**
+  Each node has the following private fields:
+  _1._ int key: represents the node's key
+  _2._ geo_location location: represents the node's location, used in the second part of the project.
+  _3._ double weight: represents the node's weight
+  _4._ String info: represents the node's info
+  _5._ int tag: represents the node's tag
+  _6._ HashMap<Integer, edge_data> neighbors: HashMap which represent the node's neighbors.
+  _7._ HashSet<Integer> destOf: hashset to know which nodes are the destination of an edge originating from this node.
+  _8._ Colors color: represents the node's info.
+ ***
+ 
+**EdgeData**
+ this class implements the edge_data interface.
+ The class represents the edges(vertex) in our graph.
+ ***
+ ***Representation of edges**
+ Each edge has the following private fields:
+  _1._ int src: represents the edge's source node with key src.
+  _2._ int dest;: represents the edge's destination node with key dest.
+  _3._ double weight: represents the edge's weight
+  _4._ String info: represents the edge's info
+  _5._ int tag: represents the edge's tag
+  ***
+  
+## **Package gameClient**
+## **On The Classes**
+**Arena**
 ***
+**CL_Pokemon**
+***
+**CL_Agent**
+***
+**Controller**
+***
+***
+**GUI classes**
+**GUI**
+***
+**Panel**
+***
+**LoginScreen**
+***
+**Ex2**
+  
+

@@ -116,7 +116,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     /** shorestPath
-     * method to return the shrotest path in an arrayList from node src to dest
+     * method to return the shortest path in an arrayList from node src to dest
      * this method too uses djikstra's algorithm, and adds the correct path but in a reverse order
      * so in the end it reverses the insertion order so the path will be correct.
      */
@@ -153,7 +153,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      * @param file - the file name (may include a relative path).
      * @return true if we successfully loaded the file
      * method to save a graph to a file using JSON formatting
-     * writes the JSON using the jasonGraph method below
+     * writes the JSON using the jsonGraph method below
      */
     @Override
     public boolean save(String file) {
@@ -178,7 +178,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
     }
     /** jsonGraph
-     * this method takes a directed weighted graph and turns in to a write-able JSON object
+     * @param g this method takes a directed weighted graph and turns in to a write-able JSON object
      * nodes and edges in the graph are represented by a JSONArray, while the graph itself is the JSONObject,
      * iterates through all nodes, and than all of each node's edges and adds it to the respective array,
      * once finished adds the 2 arrays to the graph(Json).

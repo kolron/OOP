@@ -3,7 +3,7 @@ package api;
 // class that implements edge_data which represent a edge in the graph
 public class EdgeData implements edge_data{
     //class private variables
-    private int src;
+        private int src;
     private int dest;
     private double weight;
     private String info;

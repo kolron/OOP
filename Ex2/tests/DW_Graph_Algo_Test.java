@@ -42,11 +42,7 @@ public class DW_Graph_Algo_Test {
         node_data n0 = new NodeData(0);
         g0.addNode(n0);
         assertFalse(ag0.isConnected());
-
-
-
     }
-
     @Test
     void shortestPathDist() {
         directed_weighted_graph g0 = new DW_GraphDS();

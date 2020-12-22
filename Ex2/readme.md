@@ -39,11 +39,11 @@
   2. Other Methods:   
     _1.void connect(int src, int dest, double w)_: Connect node src to node dest (directed), and give their edge the weight w. Weight cannot be a negative number. 
     
-    _2.void connect(edge_data e)_: connect via edge_data e. This method connects according to the src, dest, and weight values in the edge_data e.
+   _2.void connect(edge_data e)_: connect via edge_data e. This method connects according to the src, dest, and weight values in the edge_data e.
      
-    _3.node_data removeNode(int num)_: Removes the node with key num from the graph.  
+   _3.node_data removeNode(int num)_: Removes the node with key num from the graph.  
       
-    _4.void removeEdge(int src, int dest)_: Removes the edge originating from node with key src to node with key dest. 
+   _4.void removeEdge(int src, int dest)_: Removes the edge originating from node with key src to node with key dest. 
     
    ***
  **WGraph_Algo** 

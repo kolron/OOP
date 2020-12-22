@@ -1,4 +1,4 @@
- package gameClient;
+package gameClient;
 
 import api.*;
 import gameClient.util.Point3D;

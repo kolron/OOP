@@ -1,5 +1,4 @@
- package gameClient;
-
+package gameClient;
 import api.directed_weighted_graph;
 import api.edge_data;
 import api.geo_location;

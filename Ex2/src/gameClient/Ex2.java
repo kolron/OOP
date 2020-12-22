@@ -14,7 +14,7 @@ public class Ex2 {
     private Thread loginThread;
 
     /**
-     * main function. where we run and start the game
+     * main function. where we run and start th game
      * this function take the level from the server by the user input and initiate all the variables.
      * this function starts the gui and controller threads and start them with the game thread
      * in the end we join all the threads

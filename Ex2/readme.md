@@ -8,6 +8,11 @@
  
  The first part of the project (api directory) is an implementation of a directional weighted graph, a continuation of pevious projects in the repository.
  The second part of the project (gameClient) is the implementation of the game.
+ 
+ In order to run the game, either run the Ex2.jar or clone the project and run the Ex2.java class!
+ You will need to enter a Level number and an ID to start the game, you can do so either by passing (id level) as program arguments or you will be prompted to do so in the login screen! 
+ The ID you enter doesn't have to be real, just put any number there.
+ Please Choose a level between 1 - 23!
 ***
 ## **Package api**
 ## **On The Classes**

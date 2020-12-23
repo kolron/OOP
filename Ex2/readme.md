@@ -106,21 +106,62 @@
 ## **Package gameClient**
 ## **On The Classes**
 **Arena**
+This class represents a multi Agents Arena,
+this class was given to us as a default agent arena.
+We don't use this class in the project, bar some selected methods such as:
+_1_. ArrayList<CL_Pokemon> json2Pokemons(String fs): used to get pokemons from JSON into an ArrayList
+_2_. void updateEdge(CL_Pokemon fr, directed_weighted_graph g): used to update the edge and see if a pokemon is on the edge, and update accordingly.
 ***
 **CL_Pokemon**
+This class represents our pokemons(=fruits) in the game.
+Each pokemon has the following private fields:
+_1_. edge_data _edge;
+_2_.  double _value;
+_3_.  int _type;
+_4_.  Point3D _pos;
+_5_.  double min_dist;
+All methods in this class are generic methods.
 ***
 **CL_Agent**
 ***
+This class represents our agents.
+Each agent has the following private fields
+_1_. int id;
+_2_. int dest;	private long _key;
+_3_. geo_location pos;
+_4_. double speed;
+_5_. edge_data currEdge;
+_6_. node_data currNode;
+_7_. directed_weighted_graph graph;
+_8_. CL_Pokemon currFruit;
+_10_. ArrayList<CL_Pokemon> nextPokemon;
+_11_. Controller controller; 
+_12_. double value;
+_13_. game_service gameService;
+
+The only non-generic methods in this class are the setNextPokemon and run methods.
+_1_. setNextPokemon(String pokemons): this function gets a JSON string of pokemons and set the next pokemon that this agent will follow to the closest pokemon to it.
+_2_. run(): This methods activates the agent and holds the algorithm that the agent uses to set and reach the next pokemon.
+
 **Controller**
+This class can be seen as an all-seeing observer that controlls the agents.
+Each game only 1 Controller is made. 
+the run() method in this class creates each agent in the game, and creates a thread for each agent, places them on the graph, and starts the thread for each agent.
+This method also controlls the game.move() method, and calls it less than 10 times per second.
 ***
 ***
 **GUI classes**
-**GUI**
-***
-**Panel**
+
+**GUI, Panel**
+ These classes are the GUI classes for the game.
+ the GUI class works in 'the background' and the Panel class, which is the window that appears when the game is running, is constantly updated via the GUI class(a double   buffered approach to gui)
 ***
 **LoginScreen**
+This class is what appears when you first launch the game without any args. 
+It prompts the user to enter a level and ID (The ID is used to save the score in the server, and in order to run the game one can enter a 'fake' ID such as "1")
+it passes these credentials via the the inner Credentials class to Ex2, as args for the program.
 ***
+
 **Ex2**
-  
+ This final class is the class that executes the game, it starts all the needed objects(GUI's, Controller) and loads a graph, agents, pokemons etc via the Level entered in credentials, and starts all the required threads for each object.
 

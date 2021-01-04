@@ -362,6 +362,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      * If we haven't seen a node already, and reached it in the algorithm(only possible if there's a path to it)
      * changes it's color to grey or black, (Grey if we haven't finished dealing with the node's neighbors, black if we have).
      */
+
+
+
+
+
     private void dfs_visit (NodeData node){
         node.setColor(NodeData.Colors.GREY);
         for (edge_data edge : node.getNi()) {
@@ -372,6 +377,27 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         }
         node.setColor(NodeData.Colors.BLACK);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /** dfs(arg1, arg2)
      * a similar dfs method as before, now also takes a hashmap nodes to represent the nodes in the graph.

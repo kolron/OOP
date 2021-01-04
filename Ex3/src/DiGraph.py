@@ -7,10 +7,10 @@ class DiGraph:
 
     # constructor
 
-    def __init__(self, nodes={}, neiOut={}, neiIn={}, Edges=0, MC=0):
+    def __init__(self, nodes={}, srcOf={}, destOf={}, Edges=0, MC=0):
         self.nodes = nodes
-        self.neiOut = neiOut  # edges that come out fron the node
-        self.neiIn = neiIn  # edges that come from another edge
+        self.srcOf = srcOf  # edges that come out fron the node
+        self.destOf = destOf  # edges that come from another edge
         self.Edges = Edges
         self.MC = MC
 
@@ -24,15 +24,15 @@ class DiGraph:
         return self.nodes
 
     def all_in_edges_of_node(self, id1: int):
-        kni = [i for i in self.neiIn]
+        kni = [i for i in self.destOf]
         if id1 in kni:
-            return self.neiIn[id1]
+            return self.destOf[id1]
         return {}
 
     def all_out_edges_of_node(self, id1: int):
-        kno = [i for i in self.neiOut]
+        kno = [i for i in self.srcOf]
         if id1 in kno:
-            return self.neiOut[id1]
+            return self.srcOf[id1]
         return {}
 
     def get_mc(self):
@@ -42,17 +42,17 @@ class DiGraph:
         kn = [i for i in self.nodes]
         if id1 not in kn or id2 not in kn:
             return False
-        ko = [i for i in self.neiOut]
+        ko = [i for i in self.srcOf]
         if id1 not in ko:
-            self.neiOut[id1] = {}
-        ki = [i for i in self.neiIn]
+            self.srcOf[id1] = {}
+        ki = [i for i in self.destOf]
         if id2 not in ki:
-            self.neiIn[id2] = {}
-        kno = [i for i in self.neiOut[id1]]
+            self.destOf[id2] = {}
+        kno = [i for i in self.srcOf[id1]]
         if id2 in kno:
             return False
-        self.neiOut[id1][id2] = weight
-        self.neiIn[id2][id1] = weight
+        self.srcOf[id1][id2] = weight
+        self.destOf[id2][id1] = weight
         self.Edges += 1
         self.MC += 1
         return True
@@ -66,28 +66,31 @@ class DiGraph:
             return True
         return False
 
+    def get_node(self, node_id: int):
+        return self.nodes.get(node_id)
+
     def remove_node(self, node_id: int):
         kn = [i for i in self.nodes]
         if node_id not in kn:
             return False
-        kni = [i for i in self.neiIn]
+        kni = [i for i in self.destOf]
         if node_id in kni:
-            for key in self.neiIn[node_id]:
-                del self.neiOut[key][node_id]
+            for key in self.destOf[node_id]:
+                del self.srcOf[key][node_id]
                 self.Edges -= 1
                 self.MC += 1
-                if len(self.neiOut[key]) == 0:
-                    del self.neiOut[key]
-            del self.neiIn[node_id]
-        kno = [i for i in self.neiOut]
+                if len(self.srcOf[key]) == 0:
+                    del self.srcOf[key]
+            del self.destOf[node_id]
+        kno = [i for i in self.srcOf]
         if node_id in kno:
-            for key in self.neiOut[node_id]:
-                del self.neiIn[key][node_id]
+            for key in self.srcOf[node_id]:
+                del self.destOf[key][node_id]
                 self.Edges -= 1
                 self.MC += 1
-                if len(self.neiIn[key]) == 0:
-                    del self.neiIn[key]
-            del self.neiOut[node_id]
+                if len(self.destOf[key]) == 0:
+                    del self.destOf[key]
+            del self.srcOf[node_id]
         del self.nodes[node_id]
         self.MC += 1
         return True
@@ -96,14 +99,14 @@ class DiGraph:
         kn = [i for i in self.nodes]
         if node_id1 not in kn or node_id2 not in kn:
             return False
-        kni = [i for i in self.neiIn]
+        kni = [i for i in self.destOf]
         if node_id2 in kni:
-            del self.neiIn[node_id2][node_id1]
-            del self.neiOut[node_id1][node_id2]
-            if len(self.neiIn[node_id2]) == 0:
-                del self.neiIn[node_id2]
-            if len(self.neiOut[node_id1]) == 0:
-                del self.neiOut[node_id1]
+            del self.destOf[node_id2][node_id1]
+            del self.srcOf[node_id1][node_id2]
+            if len(self.destOf[node_id2]) == 0:
+                del self.destOf[node_id2]
+            if len(self.srcOf[node_id1]) == 0:
+                del self.srcOf[node_id1]
             self.MC += 1
             self.Edges -= 1
             return True

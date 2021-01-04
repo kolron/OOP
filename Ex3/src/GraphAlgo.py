@@ -1,5 +1,5 @@
 from DiGraph import DiGraph
-
+from json import *
 
 class GraphAlgo:
 
@@ -56,39 +56,64 @@ class GraphAlgo:
         s.reverse()
         return dest.get_tag(), s
 
-
-    def dfs(self, src: int):
-        for n in self.g.get_all_v:
-            node = self.g.get_node(n)
-            node.set_info("white")
-        self.dfs_visit(src)
-
-
-    def dfs_visit(self, src:int):
-        srcNode = self.g.get_node(src)
-        srcNode.set_info("grey")
-        for n in self.g.srcOf[srcNode.get_key()]:
-            node = self.g.get_node(n)
-            if node.get_info == "white":
-                self.dfs_visit(n)
-        srcNode.set_info("black")
-
-
-
-
-
-
-    def connected_component(self, id1: int) -> list:
-        list[]
+    def save_to_json(self, file_name: str) -> bool:
+        if self.graph and self.graph is isinstance(DiGraph):
+            dir = {"Edges":[], "Nodes":[]}
+            for n in self.g.get_all_v:
+                node = self.g.get_node(n)
+                data = {}
+                data ["id"] = node.get_key
+                data["pos"] = str(node.pos)
+                dir["Nodes"].append(data)
+                data.clear()
+                for nkey in self.g.srcOf[node.get_key]:
+                    nei = self.g.get_node(nkey)
+                    data["src"] = node.get_key
+                    data["dest"] = nei.get_key
+                    data["w"] =  self.g.srcOf[node.get_key][nei.get_key]
+                    dir["Edges"].append(data)
+            with open(file_name, 'w') as file:
+                dump(dir,file)
+            return True
+        else:
+            return False
 
 
 
+    def load_from_json(self, file_name: str) -> bool:
+        with open(file_name, 'r') as file:
+            data = loads(file.read())
+        if data:
+            graph = DiGraph()
+            for elem in  data["Nodes"]:
+                if elem is isinstance(dict):
+                    id = elem.get("id")
+                    pos = elem.get("pos")
+                    if id and pos:
+                        id = int(id)
+                        x,y,z=[float(p) for p in pos.split(",")]
+                        pos(x,y,z)
+                        graph.add_node(id,pos)
+                else:
+                    continue
+            for elem in data["Edges"]:
+                if elem is isinstance(dict):
+                    src = int (elem.get("src"))
+                    dest = int (elem.get("dest"))
+                    w = float (elem.get("w"))
+                    graph.add_edge(src, dest ,w)
+                else:
+                    continue
+            self.g = graph
+            return True
+        else:
+            return False
 
-    def connected_components(self) -> List[list]:
-    if key not in found:
-       list = connected_component(key)
-        for i in list
-            found.append(i);
+
+
+
+
+
 
 graph = DiGraph({}, {}, {}, 0, 0)
 graph.add_node(0)

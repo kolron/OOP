@@ -1,9 +1,13 @@
+from Position import Position
+
+
 class NodeData:
-    def __init__(self, key, tag=0, w=0, info=""):
+    def __init__(self, key, tag=0, w=0, info="", pos: Position = None):
         self.key = key
         self.tag = tag
         self.w = w
         self.info = info
+        self.pos = pos
 
     def get_key(self):
         return self.key

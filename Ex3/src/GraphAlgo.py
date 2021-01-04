@@ -78,8 +78,6 @@ class GraphAlgo:
         else:
             return False
 
-
-
     def load_from_json(self, file_name: str) -> bool:
         with open(file_name, 'r') as file:
             data = loads(file.read())

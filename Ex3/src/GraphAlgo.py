@@ -1,6 +1,4 @@
 from DiGraph import DiGraph
-from src import NodeData
-from queue import PriorityQueue
 
 
 class GraphAlgo:

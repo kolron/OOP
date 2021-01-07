@@ -1,2 +1,73 @@
 #Ex3
-Ex3 in OOP course
+This exercise is a continuation of sorts to the last 3 projects, and is an implementation of the API package in Ex2, but in python, not java.
+
+##**On the Project**
+This project is a continuation of sorts to the last 3 projects, and is an implementation of the API package in https://github.com/kolron/OOP/tree/main/Ex2, but in python, not java.
+In this project we implement a directional weighted graph
+
+## **On The Classes**
+**NodeData** that implements the node_info interface.  
+ The Inner class **NodeData** represents the nodes in the graph.  
+ 
+ ***
+ **DiGraph**  
+ This class implements the GraphInterface, The class represents our graph using a dictionary that hold all the nodes.
+ 
+ ***
+ 
+**Methods in the class DiGraph:**    
+ 1. Standard Methods:  
+    _1.node_info getNode(int num)_: Returns the node_info of node with key num.     
+  
+    _2.boolean hasEdge(int num1, int num2)_: Checks if there's an edge between node with key num1, and num2. 
+   
+    _3.double getEdge(int num1, int num2)_:  Gets the weight of the edge between node with key num1, and num2.    
+    
+    _4.void addNode(int num)_:  A node with key num. Cannot add if key already exists.  
+    
+    _5.Collection<node_info> getV()_: Returns a shallow copy of all the nodes in the graph.
+    
+    _6.Collection<node_info> getV(int num)_: Returns a collection containing all nodes connected to a node with key num.
+    
+    _7.int nodeSize()_: Returns the amount of nodes currently in the graph.
+    
+    _8.int edgeSize()_: Returns the amount of edges in the graph.
+    
+    _9.int getMC()_: Returns the amount of modifications made on the graph.
+    
+  
+  2. Other Methods:   
+    _1.void connect(int num1, int num2, double w)_: Connects 2 nodes in the graph, and give their edge the weight w. Weight cannot be a negative number. 
+     
+      _2.node_info removeNode(int num)_: Removes the node with key num from the graph.  
+      
+      _3.void removeEdge(int num1, int num2)_: Removes the edge between node with key num1 and key num2.
+    
+   ***
+ **GraphAlgo** 
+  This class implements the GraphAlgoInterface interface  
+  This class is a BlackBox to which you insert a graph and preform several methods on.
+***
+**Methods in the class GraphAlgo:**
+1. Standard Methods:  
+    _1.getGraph()_: Return the weighted graph that is currently in this BlackBox.
+    
+    _2.init(weighted_graph g)_: Initialize a new weighted graph to the BlackBox - essentially changes the graph we are working on.  
+      
+    _3.weighted_graph copy()_: Creates a deep copy of the graph inside the BlackBox  
+    
+ 2. Other Methods:  
+  _1. boolean isConnected()_: Returns true if the graph isConnected - meaning by traversing only on edges you can reach every node. 
+   
+    _2.double shortestPathDist(int src, int dest)_: This Method uses the Djikstra's algorithm for weighted graphs, to find the shortest distance 
+    (=Smallest Weight) between 2 nodes src and dest.
+    it returns the weight of that path.  
+    
+    _3.List<node_info> shortestPath(int src, int dest)_: This method too uses Djikstra's algorithm but now instead of returning
+    the weight of the path from node src to node dest, it now returns an ArrayList containing the route itself.  
+    
+    _4.boolean save(String name)_: This method saves the graph inside the BlackBox to a file called name, it saves the graph as an object that is unreadable to the humans.  
+    
+    _5.boolean load(String name)_: This method load the graph from a file called name, to the BlackBox.
+    
+***the BlackBox.

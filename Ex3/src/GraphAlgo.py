@@ -107,32 +107,32 @@ class GraphAlgo:
             return True
         else:
             return False
-
-    def dfs(self, src: int):
-        discovery = finish = parent = {}
-        for n in self.g.get_all_v:
-            node = self.g.get_node(n)
-            node.set_info("white")
-        time = 0
-        for n in self.g.get_all_v:
-            node = self.g.get_node(n)
-            if node.get_info == "white":
-                src_n, time, parent, discovery, finish = self.dfs_visit(src, time, parent, discovery, finish)
-
-    def dfs_visit(self, src: int, time: int, parent: dict, d: dict, f: dict):
-        src_node = self.g.get_node(src)
-        src_node.set_info("grey")
-        time += 1
-        d[src] = time
-        for n in self.g.srcOf[src_node.get_key()]:
-            node = self.g.get_node(n)
-            if node.get_info == "white":
-                parent[n] = src
-                self.dfs_visit(n)
-        src_node.set_info("black")
-        f[src] = time
-        ++time
-        return src, time, parent, d, f
+    #
+    # def dfs(self, src: int):
+    #     discovery = finish = parent = {}
+    #     for n in self.g.get_all_v:
+    #         node = self.g.get_node(n)
+    #         node.set_info("white")
+    #     time = 0
+    #     for n in self.g.get_all_v:
+    #         node = self.g.get_node(n)
+    #         if node.get_info == "white":
+    #             src_n, time, parent, discovery, finish = self.dfs_visit(src, time, parent, discovery, finish)
+    #
+    # def dfs_visit(self, src: int, time: int, parent: dict, d: dict, f: dict):
+    #     src_node = self.g.get_node(src)
+    #     src_node.set_info("grey")
+    #     time += 1
+    #     d[src] = time
+    #     for n in self.g.srcOf[src_node.get_key()]:
+    #         node = self.g.get_node(n)
+    #         if node.get_info == "white":
+    #             parent[n] = src
+    #             self.dfs_visit(n)
+    #     src_node.set_info("black")
+    #     f[src] = time
+    #     ++time
+    #     return src, time, parent, d, f
 
     def connected_component(self, id1: int) -> list:
         kn = [i for i in self.g.nodes]
@@ -197,7 +197,7 @@ class GraphAlgo:
                nei = self.g.get_node(neikey)
                neix = nei.get_x()
                neiy = nei.get_y()
-               plt.arrow(nodex, nodey,(neix-nodex),(neiy-nodey), head_width = 1, length_includes_head = True)
+               plt.arrow(nodex, nodey,(neix-nodex),(neiy-nodey), head_width = 1.5, head_length = 1.5, length_includes_head = True)
 
         plt.show()
 

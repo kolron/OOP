@@ -1,4 +1,5 @@
 from NodeData import NodeData
+from Position import Position
 
 
 class DiGraph:
@@ -9,8 +10,8 @@ class DiGraph:
 
     def __init__(self, nodes={}, srcOf={}, destOf={}, Edges=0, MC=0):
         self.nodes = nodes
-        self.srcOf = srcOf  # edges that come out fron the node
-        self.destOf = destOf  # edges that come from another edge
+        self.srcOf = srcOf
+        self.destOf = destOf
         self.Edges = Edges
         self.MC = MC
 
@@ -60,7 +61,7 @@ class DiGraph:
     def add_node(self, node_id: int):
         kn = [i for i in self.nodes]
         if node_id not in kn:
-            n = NodeData(node_id, 0, 0, "")
+            n = NodeData(node_id, 0, 0, "", pos = Position())
             self.nodes[node_id] = n
             self.MC += 1
             return True

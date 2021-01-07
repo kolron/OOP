@@ -8,6 +8,18 @@ class NodeData:
         self.w = w
         self.info = info
         self.pos = pos
+        if self.pos is None:
+            self.pos = Position()
+
+    def get_x(self) -> float:
+        ret = self.pos.pos_x()
+        print (ret)
+        return ret
+
+    def get_y(self) -> float:
+        ret = self.pos.pos_y()
+        print(ret)
+        return ret
 
     def get_key(self):
         return self.key
@@ -34,5 +46,11 @@ class NodeData:
         return "Node[" + str(self.get_key()) + "]"
 
 
-#n = NodeData(1, 1, 1, "")
-#print(n.__str__())
+node = NodeData(1,0,0,"", pos = Position(1.0, 1.0, 0.0))
+print("1st line:", node.pos)
+print("2nd line:")
+node.get_x()
+print("3rd line:")
+node.get_y()
+
+

@@ -58,7 +58,7 @@ class DiGraph:
         self.MC += 1
         return True
 
-    def add_node(self, node_id: int):
+    def add_node(self, node_id: int, pos1: tuple = None):
         kn = [i for i in self.nodes]
         if node_id not in kn:
             n = NodeData(node_id, 0, 0, "", pos = Position())

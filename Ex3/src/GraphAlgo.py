@@ -58,7 +58,7 @@ class GraphAlgo:
         return dest.get_tag(), s
 
     def save_to_json(self, file_name: str) -> bool:
-        if self.graph and self.graph is isinstance(DiGraph):
+        if self.graph and self.graph is type(DiGraph):
             dir = {"Edges": [], "Nodes": []}
             for n in self.g.get_all_v:
                 node = self.g.get_node(n)
@@ -85,7 +85,7 @@ class GraphAlgo:
         if data:
             graph = DiGraph()
             for elem in data["Nodes"]:
-                if elem is isinstance(dict):
+                if elem is type(dict):
                     id = elem.get("id")
                     pos = elem.get("pos")
                     if id and pos:
@@ -96,7 +96,7 @@ class GraphAlgo:
                 else:
                     continue
             for elem in data["Edges"]:
-                if elem is isinstance(dict):
+                if elem is type(dict):
                     src = int(elem.get("src"))
                     dest = int(elem.get("dest"))
                     w = float(elem.get("w"))
@@ -201,21 +201,4 @@ class GraphAlgo:
 
         plt.show()
 
-
-graph = DiGraph({}, {}, {}, 0, 0)
-graph.add_node(0)
-graph.add_node(1)
-graph.add_node(2)
-graph.add_node(3)
-graph.add_edge(0, 1, 1)
-graph.add_edge(1, 2, 4)
-print(graph.srcOf)
-print(graph.destOf)
-#print()
-g_algo = GraphAlgo(graph)
-#print(g_algo.shortest_path(0, 1))
-#print(g_algo.shortest_path(0, 2))
-#print(g_algo.shortest_path(2, 1))
-
-g_algo.plot_graph()
 

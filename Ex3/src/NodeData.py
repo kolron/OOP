@@ -1,25 +1,12 @@
-from Position import Position
+
 
 
 class NodeData:
-    def __init__(self, key, tag=0, w=0, info="", pos: Position = None):
+    def __init__(self, key, tag=0, w=0, info=""):
         self.key = key
         self.tag = tag
         self.w = w
         self.info = info
-        self.pos = pos
-        if self.pos is None:
-            self.pos = Position()
-
-    def get_x(self) -> float:
-        ret = self.pos.pos_x()
-        print (ret)
-        return ret
-
-    def get_y(self) -> float:
-        ret = self.pos.pos_y()
-        print(ret)
-        return ret
 
     def get_key(self):
         return self.key
@@ -45,12 +32,5 @@ class NodeData:
     def __str__(self):
         return "Node[" + str(self.get_key()) + "]"
 
-
-node = NodeData(1,0,0,"", pos = Position(1.0, 1.0, 0.0))
-print("1st line:", node.pos)
-print("2nd line:")
-node.get_x()
-print("3rd line:")
-node.get_y()
 
 

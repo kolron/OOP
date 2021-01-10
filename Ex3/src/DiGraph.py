@@ -1,17 +1,17 @@
 from NodeData import NodeData
-from Position import Position
+from GraphInterface import GraphInterface
 
-
-class DiGraph:
+class DiGraph(GraphInterface):
     #MC = 0  # number of action in the graph
     #Edges = 0  # number of edges
 
     # constructor
 
-    def __init__(self, nodes={}, srcOf={}, destOf={}, Edges=0, MC=0):
+    def __init__(self, nodes={}, srcOf={}, destOf={}, positions={}, Edges=0, MC=0):
         self.nodes = nodes
         self.srcOf = srcOf
         self.destOf = destOf
+        self.positions = positions
         self.Edges = Edges
         self.MC = MC
 
@@ -61,7 +61,7 @@ class DiGraph:
     def add_node(self, node_id: int, pos1: tuple = None):
         kn = [i for i in self.nodes]
         if node_id not in kn:
-            n = NodeData(node_id, 0, 0, "", pos = Position())
+            n = NodeData(node_id, 0, 0, "")
             self.nodes[node_id] = n
             self.MC += 1
             return True

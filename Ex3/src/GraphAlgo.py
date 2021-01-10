@@ -1,6 +1,8 @@
+import json
+
 from DiGraph import DiGraph
-from json import *
 import matplotlib.pyplot as plt
+from random import uniform
 
 class GraphAlgo:
 
@@ -58,81 +60,35 @@ class GraphAlgo:
         return dest.get_tag(), s
 
     def save_to_json(self, file_name: str) -> bool:
-        if self.graph and self.graph is type(DiGraph):
-            dir = {"Edges": [], "Nodes": []}
-            for n in self.g.get_all_v:
-                node = self.g.get_node(n)
-                data = {}
-                data["id"] = node.get_key
-                data["pos"] = str(node.pos)
-                dir["Nodes"].append(data)
-                data.clear()
-                for nkey in self.g.srcOf[node.get_key]:
-                    nei = self.g.get_node(nkey)
-                    data["src"] = node.get_key
-                    data["dest"] = nei.get_key
-                    data["w"] = self.g.srcOf[node.get_key][nei.get_key]
-                    dir["Edges"].append(data)
-            with open(file_name, 'w') as file:
-                dump(dir, file)
-            return True
-        else:
-            return False
+        edges = []
+        nodes = []
+        dir = {"Edges": "", "Nodes": "" }
+        for n in self.g.get_all_v:
+            for neikey in self.g.srcOf[n]:
+                edges.append(({"src" : n, "dest" : neikey, "w" : self.g.srcOf[n][neikey]}))
+            if self.g.positions == {}:
+                nodes.append({"id" : n})
+            else:
+                nodes.append({"id" : n, "pos" : self.g.positions[n]})
+            dir["Edges"] = edges
+            dir ["Nodes"] = nodes
+        with open(file_name, 'w') as file:
+            json.dump(dir, file)
+        return True
 
     def load_from_json(self, file_name: str) -> bool:
+        self.g = DiGraph()
         with open(file_name, 'r') as file:
-            data = loads(file.read())
-        if data:
-            graph = DiGraph()
+            data = json.loads(file.read())
             for elem in data["Nodes"]:
-                if elem is type(dict):
-                    id = elem.get("id")
-                    pos = elem.get("pos")
-                    if id and pos:
-                        id = int(id)
-                        x, y, z = [float(p) for p in pos.split(",")]
-                        pos(x, y, z)
-                        graph.add_node(id, pos)
+                self.g.add_node(elem["id"])
+                if "pos" in elem:
+                     self.g.positions[elem["id"]] = elem["pos"]
                 else:
-                    continue
+                     continue
             for elem in data["Edges"]:
-                if elem is type(dict):
-                    src = int(elem.get("src"))
-                    dest = int(elem.get("dest"))
-                    w = float(elem.get("w"))
-                    graph.add_edge(src, dest, w)
-                else:
-                    continue
-            self.g = graph
+                self.g.add_edge(elem["src"], elem["dest"], elem['w'])
             return True
-        else:
-            return False
-    #
-    # def dfs(self, src: int):
-    #     discovery = finish = parent = {}
-    #     for n in self.g.get_all_v:
-    #         node = self.g.get_node(n)
-    #         node.set_info("white")
-    #     time = 0
-    #     for n in self.g.get_all_v:
-    #         node = self.g.get_node(n)
-    #         if node.get_info == "white":
-    #             src_n, time, parent, discovery, finish = self.dfs_visit(src, time, parent, discovery, finish)
-    #
-    # def dfs_visit(self, src: int, time: int, parent: dict, d: dict, f: dict):
-    #     src_node = self.g.get_node(src)
-    #     src_node.set_info("grey")
-    #     time += 1
-    #     d[src] = time
-    #     for n in self.g.srcOf[src_node.get_key()]:
-    #         node = self.g.get_node(n)
-    #         if node.get_info == "white":
-    #             parent[n] = src
-    #             self.dfs_visit(n)
-    #     src_node.set_info("black")
-    #     f[src] = time
-    #     ++time
-    #     return src, time, parent, d, f
 
     def connected_component(self, id1: int) -> list:
         kn = [i for i in self.g.nodes]
@@ -180,24 +136,40 @@ class GraphAlgo:
         return result
 
     def plot_graph(self) -> None:
+        if self.g.positions == {}:
+            for n in self.g.positions:
+                x = uniform(0,1000000)
+                y = uniform(0,1000000)
+                pos = str(x) + "," + str(y)
+                self.g.positions = pos
+                plt.scatter(x,y)
+                plt.annotate(n, xy = (x-0.5, y+1))
+            else:
+                for n in self.g.positions:
+                    len_x = self.g.positions[n].find(",")
+                    len_y = self.g.positions[n].find("," , len_x + 1)
+                    x = self.g.positions[n][0 : len_x]
+                    x = float(x)
+                    y = self.g.positions[n][len_x + 1 : len_y]
+                    y= float(y)
+                    plt.plot(x,y)
         for n in self.g.nodes:
-            node = self.g.get_node(n)
-            x = (node.get_x())
-            y = (node.get_y())
-            plt.scatter(x,y)
-            plt.annotate(node.get_key(), xy=((node.get_x())-0.5, (node.get_y())+1))
-
-        for n in self.g.nodes:
-            node = self.g.get_node(n)
-            nodex = node.get_x()
-            nodey = node.get_y()
+            n_len_x = self.g.positions[n].find(",")
+            n_len_y = self.g.positions[n].find(",", n_len_x + 1)
+            node_x = self.g.positions[n][0: n_len_x]
+            node_x = float(node_x)
+            node_y = self.g.positions[n][n_len_x + 1: n_len_y]
+            node_y = float(node_y)
             if self.g.srcOf.get(n) is None:
                 continue
             for neikey in self.g.srcOf[n]:
-               nei = self.g.get_node(neikey)
-               neix = nei.get_x()
-               neiy = nei.get_y()
-               plt.arrow(nodex, nodey,(neix-nodex),(neiy-nodey), head_width = 1.5, head_length = 1.5, length_includes_head = True)
+                nei_len_x = self.g.positions[neikey].find(",")
+                nei_len_y = self.g.positions[neikey].find(",", nei_len_x + 1)
+                nei_x = self.g.positions[n][0: nei_len_x]
+                nei_x = float(nei_x)
+                nei_y = self.g.positions[n][nei_len_x + 1: nei_len_y]
+                nei_y = float(nei_y)
+                plt.arrow(node_x, node_y,(nei_x-node_x),(nei_y-node_y), head_width = 1.5, head_length = 1.5, length_includes_head = True)
 
         plt.show()
 

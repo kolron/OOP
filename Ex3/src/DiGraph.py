@@ -2,8 +2,6 @@ from NodeData import NodeData
 from GraphInterface import GraphInterface
 
 class DiGraph(GraphInterface):
-    #MC = 0  # number of action in the graph
-    #Edges = 0  # number of edges
 
     # constructor
 

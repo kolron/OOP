@@ -63,9 +63,10 @@ class GraphAlgo:
         edges = []
         nodes = []
         dir = {"Edges": "", "Nodes": "" }
-        for n in self.g.get_all_v:
-            for neikey in self.g.srcOf[n]:
-                edges.append(({"src" : n, "dest" : neikey, "w" : self.g.srcOf[n][neikey]}))
+        for n in self.g.nodes:
+            if n in self.g.srcOf and self.g.srcOf[n] != {}:
+                for neikey in self.g.srcOf[n]:
+                    edges.append(({"src" : n, "dest" : neikey, "w" : self.g.srcOf[n][neikey]}))
             if self.g.positions == {}:
                 nodes.append({"id" : n})
             else:
@@ -74,6 +75,7 @@ class GraphAlgo:
             dir ["Nodes"] = nodes
         with open(file_name, 'w') as file:
             json.dump(dir, file)
+        print("Successfully saved file "  + file_name)
         return True
 
     def load_from_json(self, file_name: str) -> bool:
@@ -85,9 +87,20 @@ class GraphAlgo:
                 if "pos" in elem:
                      self.g.positions[elem["id"]] = elem["pos"]
                 else:
-                     continue
+                     x = uniform(1,100000)
+                     y = uniform(1,100000)
+                     z = 0.0
+                     pos = ""
+                     strx = str(x)
+                     stry = str(y)
+                     strz = str(z)
+                     pos =strx+","+stry+" ,"+strz
+
+                     self.g.positions[elem["id"]] = pos
+
             for elem in data["Edges"]:
                 self.g.add_edge(elem["src"], elem["dest"], elem['w'])
+            print("Successfully loaded file "+ file_name)
             return True
 
     def connected_component(self, id1: int) -> list:
@@ -138,8 +151,8 @@ class GraphAlgo:
     def plot_graph(self) -> None:
         if self.g.positions == {}:
             for n in self.g.positions:
-                x = uniform(0,1000000)
-                y = uniform(0,1000000)
+                x = uniform(0,100000)
+                y = uniform(0,100000)
                 pos = str(x) + "," + str(y)
                 self.g.positions = pos
                 plt.scatter(x,y)
@@ -154,22 +167,16 @@ class GraphAlgo:
                     y= float(y)
                     plt.plot(x,y)
         for n in self.g.nodes:
-            n_len_x = self.g.positions[n].find(",")
-            n_len_y = self.g.positions[n].find(",", n_len_x + 1)
-            node_x = self.g.positions[n][0: n_len_x]
-            node_x = float(node_x)
-            node_y = self.g.positions[n][n_len_x + 1: n_len_y]
-            node_y = float(node_y)
+            split_pos = self.g.positions[n].split(",")
+            node_x = float(split_pos[0])
+            node_y = float(split_pos[1])
             if self.g.srcOf.get(n) is None:
                 continue
             for neikey in self.g.srcOf[n]:
-                nei_len_x = self.g.positions[neikey].find(",")
-                nei_len_y = self.g.positions[neikey].find(",", nei_len_x + 1)
-                nei_x = self.g.positions[n][0: nei_len_x]
-                nei_x = float(nei_x)
-                nei_y = self.g.positions[n][nei_len_x + 1: nei_len_y]
-                nei_y = float(nei_y)
-                plt.arrow(node_x, node_y,(nei_x-node_x),(nei_y-node_y), head_width = 1.5, head_length = 1.5, length_includes_head = True)
+                split_pos_nei = self.g.positions[neikey].split(",")
+                nei_x = float(split_pos_nei[0])
+                nei_y = float(split_pos_nei[1])
+                plt.arrow(node_x, node_y,(nei_x-node_x),(nei_y-node_y), head_width = 1, head_length = 1, length_includes_head = True)
 
         plt.show()
 

@@ -12,7 +12,8 @@ In this project we implement a directional weighted graph
  ***
  **DiGraph**  
  This class implements the GraphInterface, The class represents our graph using a dictionary that hold all the nodes.
- In addition to said dictionary, the graph holds 2 other Dictionary - srcOf and destOf, these dictionaries hold each node's neighbors (according to the dictionary's name). 
+ In addition to said dictionary, the graph holds 3 other Dictionaries - srcOf and destOf, these dictionaries hold each node's neighbors (according to the dictionary's name). 
+ The positions dictionary holds each node's position as a string of "x,y,z".
  
  
  ***

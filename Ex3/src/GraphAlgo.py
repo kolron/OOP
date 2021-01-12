@@ -1,10 +1,11 @@
 import json
-
 from DiGraph import DiGraph
 import matplotlib.pyplot as plt
 from random import uniform
+import GraphAlgoInterface
 
-class GraphAlgo:
+
+class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, g=None):
         self.g = g
@@ -113,7 +114,7 @@ class GraphAlgo:
             if id1 in list:
                 return list
 
-    def connected_components(self):  # -> List[list]:
+    def connected_components(self) -> list[list]:
         graph = {}
         for key in self.g.nodes:
             graph[key] = []

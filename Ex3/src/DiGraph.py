@@ -1,6 +1,7 @@
 from NodeData import NodeData
 from GraphInterface import GraphInterface
 
+
 class DiGraph(GraphInterface):
 
     # constructor

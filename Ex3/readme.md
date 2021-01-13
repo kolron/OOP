@@ -1,7 +1,7 @@
-#Ex3
+# Ex3
 This exercise is a continuation of sorts to the last 3 projects, and is an implementation of the API package in Ex2, but in python, not java.
 
-##**On the Project**
+## **On the Project**
 This project is a continuation of sorts to the last 3 projects, and is an implementation of the API package in https://github.com/kolron/OOP/tree/main/Ex2, but in python, not java.
 In this project we implement a directional weighted graph
 

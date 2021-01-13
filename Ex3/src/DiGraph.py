@@ -1,6 +1,6 @@
 from NodeData import NodeData
 from GraphInterface import GraphInterface
-
+from random import uniform
 
 class DiGraph(GraphInterface):
 
@@ -63,6 +63,23 @@ class DiGraph(GraphInterface):
             n = NodeData(node_id, 0, 0, "")
             self.nodes[node_id] = n
             self.MC += 1
+            if pos1 is not None:
+                pos = ""
+                strx = str(pos1[0])
+                stry = str(pos1[1])
+                strz = str(pos1[2])
+                pos = strx + "," + stry + " ," + strz
+                self.positions[node_id] = pos
+            else:
+                x = uniform(1, 100000)
+                y = uniform(1, 100000)
+                z = 0.0
+                pos = ""
+                strx = str(x)
+                stry = str(y)
+                strz = str(z)
+                pos = strx + "," + stry + " ," + strz
+                self.positions[node_id] = pos
             return True
         return False
 
@@ -92,6 +109,7 @@ class DiGraph(GraphInterface):
                     del self.destOf[key]
             del self.srcOf[node_id]
         del self.nodes[node_id]
+        del self.positions[node_id]
         self.MC += 1
         return True
 

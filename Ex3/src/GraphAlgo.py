@@ -2,7 +2,7 @@ import json
 from DiGraph import DiGraph
 import matplotlib.pyplot as plt
 from random import uniform
-import GraphAlgoInterface
+from GraphAlgoInterface import GraphAlgoInterface
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -150,23 +150,13 @@ class GraphAlgo(GraphAlgoInterface):
         return result
 
     def plot_graph(self) -> None:
-        if self.g.positions == {}:
-            for n in self.g.positions:
-                x = uniform(0,100000)
-                y = uniform(0,100000)
-                pos = str(x) + "," + str(y)
-                self.g.positions = pos
-                plt.scatter(x,y)
-                plt.annotate(n, xy = (x-0.5, y+1))
-            else:
-                for n in self.g.positions:
-                    len_x = self.g.positions[n].find(",")
-                    len_y = self.g.positions[n].find("," , len_x + 1)
-                    x = self.g.positions[n][0 : len_x]
-                    x = float(x)
-                    y = self.g.positions[n][len_x + 1 : len_y]
-                    y= float(y)
-                    plt.plot(x,y)
+        for n in self.g.positions:
+            split_pos = self.g.positions[n].split(",")
+            x = float(split_pos[0])
+            y = float(split_pos[1])
+            plt.scatter(x,y)
+            plt.annotate(n, xy = (x-0.5, y+100))
+
         for n in self.g.nodes:
             split_pos = self.g.positions[n].split(",")
             node_x = float(split_pos[0])
@@ -177,8 +167,7 @@ class GraphAlgo(GraphAlgoInterface):
                 split_pos_nei = self.g.positions[neikey].split(",")
                 nei_x = float(split_pos_nei[0])
                 nei_y = float(split_pos_nei[1])
-                plt.arrow(node_x, node_y,(nei_x-node_x),(nei_y-node_y), head_width = 1, head_length = 1, length_includes_head = True)
+                plt.arrow(node_x, node_y,(nei_x-node_x),(nei_y-node_y), head_width = 0.0001, head_length =0.001 , width=0.000001, length_includes_head = True)
 
         plt.show()
-
 

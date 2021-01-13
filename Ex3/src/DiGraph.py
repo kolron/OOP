@@ -65,8 +65,8 @@ class DiGraph(GraphInterface):
             self.MC += 1
             if pos1 is not None:
                 pos = ""
-                strx = str(pos1[0])
-                stry = str(pos1[1])
+                strx = str(pos1[0]*100)
+                stry = str(pos1[1]*100)
                 strz = str(pos1[2])
                 pos = strx + "," + stry + " ," + strz
                 self.positions[node_id] = pos

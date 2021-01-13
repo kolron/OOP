@@ -87,9 +87,19 @@ class GraphAlgo(GraphAlgoInterface):
                 self.g.add_node(elem["id"])
                 if "pos" in elem:
                      self.g.positions[elem["id"]] = elem["pos"]
+                     split_pos = self.g.positions[elem["id"]].split(",")
+                     pos = ""
+                     x = float(split_pos[0])*100000
+                     y = float(split_pos[1])*100000
+                     strx = str(x)
+                     stry = str(y)
+
+                     pos = strx + "," + stry
+                     self.g.positions[elem["id"]] = pos
+
                 else:
-                     x = uniform(1,100000)
-                     y = uniform(1,100000)
+                     x = uniform(1,2500)
+                     y = uniform(1,2500)
                      z = 0.0
                      pos = ""
                      strx = str(x)
@@ -155,7 +165,7 @@ class GraphAlgo(GraphAlgoInterface):
             x = float(split_pos[0])
             y = float(split_pos[1])
             plt.scatter(x,y)
-            plt.annotate(n, xy = (x-0.5, y+100))
+            plt.annotate(n, xy = (x-0.5, y+10))
 
         for n in self.g.nodes:
             split_pos = self.g.positions[n].split(",")
@@ -167,7 +177,7 @@ class GraphAlgo(GraphAlgoInterface):
                 split_pos_nei = self.g.positions[neikey].split(",")
                 nei_x = float(split_pos_nei[0])
                 nei_y = float(split_pos_nei[1])
-                plt.arrow(node_x, node_y,(nei_x-node_x),(nei_y-node_y), head_width = 0.0001, head_length =0.001 , width=0.000001, length_includes_head = True)
+                plt.arrow(node_x, node_y,(nei_x-node_x),(nei_y-node_y), head_width = 25, head_length =44, length_includes_head = True)
 
         plt.show()
 

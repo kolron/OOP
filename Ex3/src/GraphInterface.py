@@ -59,14 +59,14 @@ class GraphInterface:
         """
         raise NotImplementedError
 
-    def remove_node(self, node_id: int) -> bool:
-        """
-        Removes a node from the graph.
-        @param node_id: The node ID
-        @return: True if the node was removed successfully, False o.w.
-        Note: if the node id does not exists the function will do nothing
-        """
-        raise NotImplementedError
+        def remove_node(self, node_id: int) -> bool:
+            """
+            Removes a node from the graph.
+            @param node_id: The node ID
+            @return: True if the node was removed successfully, False o.w.
+            Note: if the node id does not exists the function will do nothing
+            """
+            raise NotImplementedError
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         """

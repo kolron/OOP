@@ -101,14 +101,14 @@ class TestDiGraph(unittest.TestCase):
         b4 = g.all_out_edges_of_node(0)
         self.assertTrue(1 in b4, True)
         g.remove_node(0)
-        self.assertTrue(g.get_mc() == 8, True)
+        self.assertTrue(g.get_mc() == 6, True)
         e1 = g.e_size()
         self.assertEqual(0, e1, "true")
         b4 = g.all_out_edges_of_node(0)
         self.assertTrue(1 not in b4, True)
         g.remove_node(1)
         g.remove_node(2)
-        self.assertTrue(g.get_mc() == 10, True)
+        self.assertTrue(g.get_mc() == 8, True)
 
 
 if __name__ == '__main__':
